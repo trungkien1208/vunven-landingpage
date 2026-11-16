@@ -1,0 +1,16 @@
+.DS_Store
+node_modules/
+site/dist/
+
+# Raw Codex art (about 1.8 GB) stays on the drawing machine.
+# The web-ready copies the page uses are committed in site/public/film.
+art-gen/**/*.png
+art-gen/**/*.jpg
+art-gen/**/*.jpeg
+art-gen/**/*.webp
+art-gen/**/*.gif
+art-gen/**/*.mp4
+
+# Codex run logs (machine paths, session ids)
+art-gen/**/*.log
+art-gen/**/log.txt

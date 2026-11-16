@@ -1,0 +1,314 @@
+<title>Vun Vén Dollhouse</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Quicksand:wght@500;600;700&family=Itim&display=swap">
+<style>
+/* Layout: one continuous take through a clay dollhouse. The cinema is fixed; scrolling trucks the camera room to room,
+   Hun waddles along the front ledge, and the HUD (title card, subtitle, phone) switches only when Hun arrives. */
+:root{
+  color-scheme:light;
+  --cream:#f6ede2; --clay:#efe2d1; --paper:#fffaf3; --ink:#3a2a22; --body:#7a665a; --line:#e6d6c3;
+  --rose:#e2577a; --sage:#8fae8b; --sage-d:#5f7d5c; --terra:#c9714a; --film:#1f1915;
+  --f-head:"Baloo 2","Quicksand",system-ui,sans-serif; --f-body:"Quicksand",system-ui,sans-serif; --f-voice:"Itim","Quicksand",cursive;
+  --gl:max(16px,env(safe-area-inset-left,0px)); --gr:max(16px,env(safe-area-inset-right,0px));
+  --head-h:58px; --film-top:calc(env(safe-area-inset-top,0px) + var(--head-h) + 34px);
+  --ease:cubic-bezier(.22,.8,.24,1);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scrollbar-color:var(--rose) var(--clay)}
+@supports selector(::-webkit-scrollbar){html{scrollbar-color:auto}}
+::-webkit-scrollbar{width:14px}::-webkit-scrollbar-track{background:var(--clay)}
+::-webkit-scrollbar-thumb{background:var(--rose);border:2.5px solid var(--ink);border-radius:10px 12px 9px 13px}
+body{background:var(--cream);color:var(--ink);font:500 16.5px/1.6 var(--f-body);padding-left:var(--gl);padding-right:var(--gr);-webkit-font-smoothing:antialiased}
+h1,h2{font-family:var(--f-head);font-weight:800;letter-spacing:-.01em;margin:0;line-height:1.08;text-wrap:balance}
+p{margin:0} img{display:block;max-width:none}
+em{font-style:normal;color:var(--rose)}
+
+/* header: hangs from the top edge */
+.head{position:fixed;z-index:50;top:0;left:0;right:0;margin:0 auto;width:max-content;max-width:calc(100% - 24px);height:calc(env(safe-area-inset-top,0px) + var(--head-h));
+  padding:env(safe-area-inset-top,0px) 8px 0 14px;display:flex;align-items:center;gap:12px;background:var(--paper);border:2.5px solid var(--ink);border-top:0;
+  border-radius:0 0 26px 28px;box-shadow:3px 4px 0 var(--ink)}
+.brand{display:flex;align-items:center;gap:7px;font:800 18px/1 var(--f-head);color:var(--ink);text-decoration:none}
+.brand img{width:30px;height:30px;border-radius:9px}
+.nav{display:flex;gap:2px}
+.nav a{font:700 14px/1 var(--f-body);color:var(--body);text-decoration:none;padding:9px 11px;border-radius:999px;transition:background .25s var(--ease),color .25s var(--ease)}
+.nav a.on{background:var(--rose);color:#fff}
+.nav a:hover:not(.on){background:var(--cream)}
+.btn{display:inline-flex;align-items:center;gap:8px;font:800 17px/1 var(--f-head);text-decoration:none;color:#fff;background:var(--rose);padding:14px 22px;cursor:pointer;
+  border:2.5px solid var(--ink);border-radius:22px 26px 20px 28px/26px 20px 28px 22px;box-shadow:4px 5px 0 var(--ink);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn:hover{transform:translate(-2px,-2px)}
+.btn:active{transform:translate(3px,4px);box-shadow:1px 1px 0 var(--ink)}
+.btn:focus-visible,.nav a:focus-visible{outline:3px solid var(--rose);outline-offset:4px}
+.head .btn{font-size:14px;padding:10px 15px;border-radius:999px;box-shadow:none;border-width:2px}
+.tab{position:absolute;left:50%;top:100%;translate:-50% 0;height:22px;padding:0 12px;display:flex;align-items:center;gap:6px;white-space:nowrap;background:var(--paper);
+  border:2.5px solid var(--ink);border-top:0;border-radius:0 0 10px 10px;box-shadow:2px 3px 0 var(--ink);font:700 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:var(--body);text-transform:uppercase}
+.tab b{color:var(--ink);font:800 12.5px/1 var(--f-head);letter-spacing:0;text-transform:none}
+.tab i{width:7px;height:7px;border-radius:50%;background:var(--rose);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.25}}
+
+/* the cinema */
+.cinema{position:fixed;z-index:1;top:var(--film-top);left:var(--gl);right:var(--gr);bottom:16px;overflow:hidden;background:var(--film);
+  border-radius:28px 30px 26px 32px;box-shadow:0 0 0 8px var(--clay),0 0 0 10.5px var(--line),0 26px 44px -14px #3a2a2266}
+.world{position:absolute;top:0;bottom:0;left:0;display:flex;will-change:transform}
+.room{position:relative;width:var(--cw,100vw);height:100%;flex:none;overflow:hidden}
+.room>img{position:absolute;top:0;height:100%;width:auto;min-width:118%;left:-18%;object-fit:cover}
+/* dollhouse cut-away: clay wall between rooms, roof eave on top, a stage ledge in front where Hun walks */
+.room::after{content:"";position:absolute;top:0;bottom:0;right:-14px;width:28px;z-index:2;background:linear-gradient(90deg,#c9b39a,#e8d6bf 30%,#d8c2a6 70%,#b9a184);box-shadow:inset 0 0 0 2px #00000014}
+.eave{position:absolute;left:0;right:0;top:0;height:22px;z-index:3;background:repeating-linear-gradient(90deg,#b8613f 0 34px,#c9714a 34px 66px);border-bottom:3px solid #8f4a2f;
+  box-shadow:0 6px 10px -4px #0005;border-radius:0 0 6px 6px}
+.ledge{position:absolute;left:0;right:0;bottom:0;height:13%;z-index:4;background:linear-gradient(#e4cfb4,#cdb497 40%,#b49a7c);border-top:3px solid #fff3;box-shadow:0 -10px 18px -10px #0006}
+.ledge::before{content:"";position:absolute;inset:0;background:var(--grain);opacity:.35;mix-blend-mode:multiply}
+.light{position:absolute;inset:0;z-index:5;pointer-events:none;mix-blend-mode:soft-light;transition:background 1s var(--ease)}
+.hun{position:absolute;z-index:6;left:0;bottom:6%;height:30%;aspect-ratio:3/4;transform-origin:50% 100%;will-change:transform}
+.hun::after{content:"";position:absolute;left:12%;right:12%;bottom:-3%;height:9%;border-radius:50%;background:radial-gradient(#0006,transparent 70%);z-index:-1}
+.hun img{position:absolute;bottom:0;left:50%;height:100%;width:auto;translate:-50% 0;visibility:hidden}
+.hun img.on{visibility:visible}
+.face{position:absolute;z-index:7;width:clamp(96px,11vw,150px);aspect-ratio:1;border-radius:50%;overflow:hidden;background:#f3e3cf;border:3px solid var(--paper);
+  box-shadow:0 0 0 2.5px var(--ink),4px 5px 0 var(--ink);opacity:0;scale:.6;transition:opacity .35s var(--ease),scale .45s var(--ease)}
+.face img{position:absolute;inset:6% 0 0 0;width:100%;height:auto}
+.face.on{opacity:1;scale:1}
+.face::after{content:"CẬN";position:absolute;left:50%;bottom:6px;translate:-50% 0;font:700 8.5px ui-monospace,Menlo,monospace;letter-spacing:.14em;background:var(--ink);color:var(--paper);padding:2px 5px;border-radius:4px}
+.vignette{position:absolute;inset:0;z-index:8;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,#0000004d 100%)}
+.cinema::after{content:"";position:absolute;inset:-50%;z-index:9;background:var(--grain);opacity:.16;pointer-events:none;animation:grain .5s steps(1) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-5%,3%)}50%{transform:translate(4%,-3%)}75%{transform:translate(-2%,-5%)}}
+.tc{position:absolute;z-index:12;left:20px;top:34px;font:700 12px/1 ui-monospace,Menlo,monospace;color:#fff;background:#1f1915aa;padding:6px 8px;border-radius:7px;font-variant-numeric:tabular-nums}
+
+/* HUD */
+.hud{position:absolute;inset:0;z-index:11;pointer-events:none}
+.hud a{pointer-events:auto}
+.fade{opacity:0;visibility:hidden;translate:0 10px;transition:opacity .5s var(--ease),translate .5s var(--ease),visibility 0s linear .5s}
+.fade.on{opacity:1;visibility:visible;translate:0 0;transition-delay:.05s,.05s,0s}
+.title{position:absolute;left:clamp(16px,2.4vw,36px);top:74px;max-width:min(380px,32%);display:grid;gap:6px;background:var(--paper);border:2.5px solid var(--ink);
+  border-radius:20px 24px 18px 26px;box-shadow:4px 5px 0 var(--ink);padding:12px 16px 14px}
+.title h2{font-size:clamp(24px,2.2vw,36px)}
+.title p{color:var(--body);font-size:14px;line-height:1.45}
+.when{justify-self:start;display:inline-flex;align-items:center;gap:7px;font:800 14px/1 var(--f-head);color:#8a4426;background:#f6dccd;padding:4px 12px 4px 4px;border-radius:999px}
+.when img{width:26px;height:26px}
+.hero{position:absolute;left:clamp(16px,3vw,48px);top:50%;translate:0 -50%;max-width:min(500px,42%);display:grid;gap:14px;background:color-mix(in srgb,var(--paper) 94%,transparent);
+  border:2.5px solid var(--ink);border-radius:28px 32px 26px 34px;box-shadow:6px 8px 0 var(--ink);padding:clamp(20px,2.4vw,34px)}
+.hero.fade{translate:0 calc(-50% + 10px)}.hero.fade.on{translate:0 -50%}
+.hero h1{font-size:clamp(42px,4.6vw,80px)}
+.hero p{color:var(--body)}
+.subs{position:absolute;left:50%;bottom:calc(13% + 14px);translate:-50% 0;width:min(720px,58%);display:grid;justify-items:center}
+.sub{grid-area:1/1;text-align:center;font:400 clamp(20px,1.8vw,27px)/1.35 var(--f-voice);color:#fff8ec;background:#1f1915c4;padding:9px 20px 11px;border-radius:14px;text-shadow:0 1px 2px #0008}
+.phone{position:absolute;right:clamp(16px,2.6vw,44px);top:50%;translate:0 -54%;width:clamp(170px,14.5vw,250px);aspect-ratio:9/19.3;background:#1d1a1e;border-radius:40px;padding:9px;
+  box-shadow:0 0 0 2.5px var(--ink),6px 8px 0 var(--ink),0 30px 50px -20px #000a;rotate:3deg}
+.phone::before{content:"";position:absolute;top:16px;left:50%;translate:-50% 0;width:30%;height:20px;border-radius:99px;background:#000;z-index:3}
+.screens{position:relative;width:100%;height:100%;border-radius:32px;overflow:hidden;background:var(--cream)}
+.scr{position:absolute;inset:0;display:grid;place-content:center;gap:6px;text-align:center;padding:16px;font:700 11.5px/1.4 var(--f-body);color:var(--body);
+  background:repeating-linear-gradient(135deg,#fffaf3 0 10px,#f4e9db 10px 20px)}
+.scr b{font:800 15px/1.25 var(--f-head);color:var(--ink)}
+.scr span{font:600 10px ui-monospace,Menlo,monospace;opacity:.7}
+
+/* opening: film leader countdown, then clay curtains */
+.leader{position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:#2a2320;transition:opacity .5s var(--ease)}
+.leader.done{opacity:0;pointer-events:none}
+.ring{position:relative;width:min(34vh,260px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;border:3px solid #f6ede2aa;
+  background:conic-gradient(#f6ede226 var(--a,0deg),transparent 0)}
+.ring::before,.ring::after{content:"";position:absolute;background:#f6ede266}
+.ring::before{left:50%;top:-30%;bottom:-30%;width:2px;translate:-50% 0}
+.ring::after{top:50%;left:-60%;right:-60%;height:2px;translate:0 -50%}
+.ring b{position:relative;z-index:1;font:800 clamp(80px,14vh,140px)/1 var(--f-head);color:#f6ede2}
+.curtain{position:absolute;top:0;bottom:0;width:51%;z-index:19;background:
+  repeating-linear-gradient(90deg,#6f8f6c 0 18px,#8fae8b 18px 40px,#7c9c78 40px 58px),#7c9c78;box-shadow:inset 0 -40px 60px -20px #0006,inset 0 30px 40px -20px #0004;
+  transition:transform 1.4s cubic-bezier(.7,0,.2,1)}
+.curtain::after{content:"";position:absolute;inset:0;background:var(--grain);opacity:.4;mix-blend-mode:multiply}
+.curtain.l{left:0;transform-origin:left}.curtain.r{right:0;transform-origin:right}
+.open .curtain.l{transform:translateX(-102%)}.open .curtain.r{transform:translateX(102%)}
+
+.reel{height:calc(var(--units,7) * 100svh)}
+.after{position:relative;z-index:2;min-height:100svh;display:grid;place-items:center;padding:80px 0}
+.endcard{width:min(760px,100%);text-align:center;display:grid;justify-items:center;gap:16px;background:var(--paper);border:2.5px solid var(--ink);border-radius:30px 34px 28px 36px;
+  box-shadow:6px 8px 0 var(--ink);padding:clamp(24px,4vw,48px)}
+.endcard h2{font-size:clamp(34px,4vw,56px)}
+.endcard p{color:var(--body)}
+.hint{position:absolute;left:50%;top:40px;translate:-50% 0;z-index:11;font:700 12px var(--f-body);color:#fff8ec;letter-spacing:.1em;text-transform:uppercase;
+  background:#1f191588;padding:6px 12px;border-radius:99px;transition:opacity .4s var(--ease)}
+.moved .hint{opacity:0}
+
+@media (max-width:860px){
+  :root{--head-h:50px}
+  .head{left:12px;right:12px;width:auto;max-width:none}
+  .nav{overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+  .nav a{font-size:13px;padding:8px 9px;flex:none}
+  .head .btn{display:none}
+  .cinema{left:10px;right:10px;bottom:10px;border-radius:22px}
+  .room>img{min-width:0;left:auto;right:-34%}
+  .hun{height:24%}
+  .title{top:60px;left:12px;max-width:64%}.title p{display:none}.title h2{font-size:21px}
+  .hero{left:12px;right:12px;top:auto;bottom:calc(13% + 16px);translate:none;max-width:none;padding:16px;gap:10px}
+  .hero.fade,.hero.fade.on{translate:none}
+  .hero h1{font-size:38px}.hero p{font-size:14px}
+  .phone{width:28vw;top:auto;bottom:calc(13% + 76px);translate:none;right:12px;border-radius:22px;padding:5px}
+  .phone::before{top:8px;height:9px}.screens{border-radius:18px}.scr{padding:6px;font-size:9px}.scr b{font-size:11px}.scr span{display:none}
+  .hero-on .phone{opacity:0}
+  .subs{width:calc(100% - 24px);bottom:auto;top:38%}.sub{font-size:18px}
+  .brand{font-size:0;gap:0}.brand img{width:32px;height:32px}
+  .face{width:86px}
+}
+@media (prefers-reduced-motion:reduce){
+  .cinema::after,.tab i{animation:none}
+  .curtain,.fade,.face,.leader{transition:none}
+}
+</style>
+
+<header class="head">
+  <span class="tab"><i></i>Đang chiếu · <b id="now">Mở đầu</b></span>
+  <a class="brand" href="#top"><img src="img/icon.png" alt="">Vun Vén</a>
+  <nav class="nav" aria-label="Tính năng">
+    <a href="#r1" data-r="1">Cảm xúc</a><a href="#r2" data-r="2">Sức khỏe</a><a href="#r3" data-r="3">Chi tiêu</a><a href="#r4" data-r="4">Gia đình</a><a href="#r5" data-r="5">Riêng tư</a>
+  </nav>
+  <a class="btn" href="#end">Nhận tin ra mắt</a>
+</header>
+
+<div class="cinema" id="cinema" aria-label="Phim: một ngày trong ngôi nhà của Hun">
+  <div class="world" id="world">
+    <div class="room"><img src="img/r0.webp" alt=""><span class="eave"></span></div>
+    <div class="room"><img src="img/r1.webp" alt=""><span class="eave"></span></div>
+    <div class="room"><img src="img/r2.webp" alt=""><span class="eave"></span></div>
+    <div class="room"><img src="img/r3.webp" alt=""><span class="eave"></span></div>
+    <div class="room"><img src="img/r4.webp" alt=""><span class="eave"></span></div>
+    <div class="room"><img src="img/r5.webp" alt=""><span class="eave"></span></div>
+    <span class="ledge"></span>
+  </div>
+  <span class="light" id="light"></span>
+  <div class="hun" id="hun">
+    <img data-pose="front" class="on" src="img/hun-0.webp" alt="">
+    <img data-pose="q" src="img/hun-1.webp" alt="">
+    <img data-pose="side" src="img/hun-2.webp" alt="">
+    <img data-pose="back" src="img/hun-3.webp" alt="">
+  </div>
+  <div class="face" id="face"><img id="faceImg" src="img/face-0.webp" alt="Cận mặt Hun"></div>
+  <span class="vignette"></span>
+  <span class="tc" id="tc">● REC 00:00:00:00</span>
+
+  <div class="hud">
+    <div class="hero fade on" id="hero">
+      <span class="when" style="padding:7px 12px;font:700 13px/1 var(--f-body)">Vun Vén · sắp có trên iPhone</span>
+      <h1>Khéo vén,<br>giỏi <em>vun.</em></h1>
+      <p>Từ chuyện chi tiêu đến sức khỏe, nhà mình cùng chăm chút mỗi ngày. Có Hun bên cạnh, mình vun vén từng chút.</p>
+      <div><a class="btn" href="#end">Nhận tin ra mắt</a></div>
+    </div>
+    <div class="title fade" data-r="1"><span class="when"><img src="img/ic1.webp" alt="">Cảm xúc</span><h2>Giữ lòng <em>nhẹ</em></h2><p>Bảy mức cảm xúc, gọi tên rồi giữ cho riêng mình.</p></div>
+    <div class="title fade" data-r="2"><span class="when"><img src="img/ic2.webp" alt="">Sức khỏe</span><h2>Giữ người <em>khỏe</em></h2><p>Nhắc thuốc, ghi số đo. Ba mẹ ở xa không cần cài app.</p></div>
+    <div class="title fade" data-r="3"><span class="when"><img src="img/ic3.webp" alt="">Chi tiêu</span><h2>Giữ ví <em>khỏe</em></h2><p>Dán tin ngân hàng, kiểm tra rồi lưu. Không hỏi OTP.</p></div>
+    <div class="title fade" data-r="4"><span class="when"><img src="img/ic4.webp" alt="">Gia đình</span><h2>Ngồi lại <em>cùng nhau</em></h2><p>Mời người thương vào tổ ấm, cùng nhìn lại tuần.</p></div>
+    <div class="title fade" data-r="5"><span class="when"><img src="img/ic5.webp" alt="">Riêng tư</span><h2>Giữ chuyện <em>nhà mình</em></h2><p>Nhật ký chỉ mình bạn xem. AI tắt sẵn. Không quảng cáo.</p></div>
+
+    <div class="phone"><div class="screens">
+      <div class="scr fade on" data-r="0"><b>Màn Tổ Ấm</b>ảnh app thật<span>/app/home.png</span></div>
+      <div class="scr fade" data-r="1"><b>Chọn mức cảm xúc</b>ảnh app thật<span>/app/mood.png</span></div>
+      <div class="scr fade" data-r="2"><b>Nhắc thuốc · huyết áp</b>ảnh app thật<span>/app/health.png</span></div>
+      <div class="scr fade" data-r="3"><b>Dán tin ngân hàng</b>ảnh app thật<span>/app/money.png</span></div>
+      <div class="scr fade" data-r="4"><b>Mời người thương</b>ảnh app thật<span>/app/family.png</span></div>
+      <div class="scr fade" data-r="5"><b>Nhật ký riêng tư</b>ảnh app thật<span>/app/privacy.png</span></div>
+    </div></div>
+
+    <div class="subs">
+      <p class="sub fade" data-r="1">Sáng nay, lòng mình thấy sao?</p>
+      <p class="sub fade" data-r="2">Trưa rồi, đến giờ uống thuốc của ba.</p>
+      <p class="sub fade" data-r="3">Từng đồng nhỏ, vun thành hũ đầy.</p>
+      <p class="sub fade" data-r="4">Có nhau rồi, chuyện nhà mình cùng lo.</p>
+      <p class="sub fade" data-r="5">Chuyện riêng của bạn, Hun giữ cẩn thận.</p>
+    </div>
+  </div>
+  <span class="hint">Cuộn để theo chân Hun</span>
+
+  <div class="curtain l" aria-hidden="true"></div><div class="curtain r" aria-hidden="true"></div>
+  <div class="leader" id="leader" aria-hidden="true"><div class="ring" id="ring"><b id="count">3</b></div></div>
+</div>
+
+<main id="top">
+  <div class="reel" id="reel">
+    <span id="r1"></span><span id="r2"></span><span id="r3"></span><span id="r4"></span><span id="r5"></span>
+  </div>
+  <section class="after" id="end">
+    <div class="endcard">
+      <span class="when" style="padding:7px 12px;font:700 13px/1 var(--f-body)">Hết phim</span>
+      <h2>Sắp công chiếu <em>trên iPhone</em></h2>
+      <p style="font:400 22px/1.4 var(--f-voice);color:var(--ink)">Mai mình lại chăm chút cho nhà mình.</p>
+      <p>Phần vé "Miễn phí trọn đời" và hỏi đáp giữ như bản trước, chạy đè lên phim như credits.</p>
+      <a class="btn" href="#top">Xem lại từ đầu</a>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  gsap.registerPlugin(ScrollTrigger);
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,mobile=matchMedia('(max-width:860px)').matches;
+  var cinema=document.getElementById('cinema'),world=document.getElementById('world'),hun=document.getElementById('hun'),light=document.getElementById('light');
+  var face=document.getElementById('face'),faceImg=document.getElementById('faceImg'),tc=document.getElementById('tc'),now=document.getElementById('now');
+  var poses={};document.querySelectorAll('#hun img').forEach(function(i){poses[i.dataset.pose]=i});
+  var ROOMS=6, HOLD=.45;                         // each room: hold (Hun acts) then walk to the next
+  var NAMES=['Mở đầu','Cảm xúc','Sức khỏe','Chi tiêu','Gia đình','Riêng tư'];
+  var FACES=[0,2,3,1,0,4];                       // close-up expression per room
+  var SPOTS=mobile?[.5,.3,.3,.3,.3,.3]:[.53,.27,.27,.27,.27,.27]; // where Hun stands in each room (fraction of room width); clear of the hero card in room 0
+  var LIGHT=['#ffb37a55','#ffd6a033','#ffffff22','#ffb06a44','#ff9a6a33','#5a6fd055'];
+  var UNITS=(ROOMS-1)+HOLD+.6;                   // walks + last hold + curtain call
+  document.documentElement.style.setProperty('--units',UNITS.toFixed(2));
+  var cw=0;function size(){cw=cinema.clientWidth;cinema.style.setProperty('--cw',cw+'px')}new ResizeObserver(size).observe(cinema);size();
+
+  // ---------- opening: leader countdown, then the curtains part ----------
+  var leader=document.getElementById('leader'),ring=document.getElementById('ring'),count=document.getElementById('count');
+  function open(){leader.classList.add('done');cinema.classList.add('open')}
+  if(reduce){open()}else{
+    var lt=gsap.timeline({onComplete:open});
+    [3,2,1].forEach(function(n,k){lt.call(function(){count.textContent=n},[],k*.75).fromTo(ring,{'--a':'0deg'},{'--a':'360deg',duration:.75,ease:'steps(12)'},k*.75)});
+    addEventListener('wheel',function(){lt.progress(1)},{once:true,passive:true});addEventListener('touchstart',function(){lt.progress(1)},{once:true,passive:true});
+  }
+
+  // ---------- one continuous take, derived purely from scroll ----------
+  var active=-1;
+  function hud(r){ // switches only when Hun has arrived (r = room) or is walking (r = 9)
+    if(r===active)return;active=r;
+    document.querySelectorAll('.sub,.title').forEach(function(el){el.classList.toggle('on',+el.dataset.r===r)});
+    document.getElementById('hero').classList.toggle('on',r===0);document.body.classList.toggle('hero-on',r===0);
+    document.querySelectorAll('.nav a').forEach(function(a){a.classList.toggle('on',+a.dataset.r===r)});
+    if(r!==9){now.textContent=NAMES[r];document.querySelectorAll('.scr').forEach(function(el){el.classList.toggle('on',+el.dataset.r===r)})}
+  }
+  function pose(p){for(var k in poses)poses[k].classList.toggle('on',k===p)}
+  var inOut=gsap.parseEase('power2.inOut'),out=gsap.parseEase('power2.out');
+  function render(u){
+    var k=Math.min(ROOMS-1,Math.floor(u)),s=u-k,cam,hx,walking=false,w=0,h=0;
+    if(k>=ROOMS-1||s<HOLD){h=Math.min(1,s/HOLD);cam=k;hx=k+SPOTS[k]}
+    else{w=(s-HOLD)/(1-HOLD);walking=true;
+      var wq=Math.floor(w*14)/14;                               // Hun's feet move on film ticks (stop-motion)
+      cam=k+inOut(w);hx=k+SPOTS[k]+(1+SPOTS[k+1]-SPOTS[k])*wq}                              // the camera eases; Hun leads, then the camera catches up
+    world.style.transform='translate3d('+(-cam*cw)+'px,0,0)';
+    var x=(hx-cam)*cw, y=0, rot=0, sx=1, sy=1;
+    if(walking){
+      var step=Math.floor(w*14);rot=step%2?6:-6;y=step%2?-cw*.006:0; // waddle: tilt side to side, tiny lift on every other step
+      pose(w<.08||w>.94?'q':'side');
+    }else{
+      pose(k===0||k>=ROOMS-1&&h>.6?'front':'q');
+      if(h<.32&&k>0){var hp=h/.32;var arc=Math.sin(hp*Math.PI);y=-arc*cw*.03;sy=hp<.12?.9:hp>.88?.9:1.04;sx=2-sy} // arrival hop with squash
+    }
+    gsap.set(hun,{x:x-hun.offsetWidth/2,y:y,rotation:rot,scaleX:sx,scaleY:sy});
+    // close-up insert while Hun acts in a room
+    var showFace=!walking&&k>0&&h>.3;face.classList.toggle('on',showFace);
+    if(showFace){faceImg.src='img/face-'+FACES[k]+'.webp';gsap.set(face,{left:x+hun.offsetWidth*.35,top:cinema.clientHeight*.18})}
+    // light of the day: blend between room tints as the camera moves
+    var a=Math.min(ROOMS-1,Math.floor(cam)),b=Math.min(ROOMS-1,a+1);light.style.background=gsap.utils.interpolate(LIGHT[a],LIGHT[b],cam-a);
+    hud(walking&&w>.06&&w<.94?9:(walking&&w>=.94?k+1:k));
+    // curtain call at the very end
+    var tail=u-(ROOMS-1)-HOLD;cinema.classList.toggle('open',!(tail>.25)&&leader.classList.contains('done'));
+  }
+  var rests=[];for(var r=0;r<ROOMS;r++)rests.push((r+HOLD*.6)/UNITS);rests[0]=0;rests.push(1);
+  ScrollTrigger.create({trigger:'#reel',start:'top top',end:'bottom bottom',scrub:reduce?true:.9,
+    onUpdate:function(self){document.body.classList.toggle('moved',self.progress>.003);render(self.progress*UNITS)},
+    snap:reduce?false:{snapTo:rests,duration:{min:.35,max:.9},delay:.08,ease:'power2.inOut',directional:true}});
+  render(0);
+  document.querySelectorAll('.nav a').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var r=+a.dataset.r;var st=ScrollTrigger.getAll()[0];
+    scrollTo({top:st.start+(st.end-st.start)*rests[r],behavior:reduce?'auto':'smooth'})})});
+
+  // ambient: film timecode, and a clay "boil" on Hun at 12 fps even when the camera is still
+  var t0=performance.now(),tick=0;
+  gsap.ticker.add(function(){var ms=performance.now()-t0,s=Math.floor(ms/1000),p=function(n){return('0'+n).slice(-2)};
+    tc.textContent='● REC 00:'+p(Math.floor(s/60)%60)+':'+p(s%60)+':'+p(Math.floor(ms%1000/83.3));
+    if(reduce)return;var t=Math.floor(ms/83.3);if(t!==tick){tick=t;hun.style.translate=((t*7919)%3-1)*.5+'px '+((t*104729)%3-1)*.4+'px'}});
+})();
+</script>

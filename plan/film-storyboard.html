@@ -1,0 +1,491 @@
+<title>Kịch bản Vun Vén</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap&subset=vietnamese">
+<style>
+/* Layout: a storyboard sheet. Decisions up top, then one film-strip row per scene, then production and open questions. */
+:root{
+  --bg:#f3e9dc; --paper:#fffaf3; --ink:#2b211c; --body:#6b5b50; --line:#e2d3c1;
+  --rose:#c02f57; --sage:#6f8f74; --film:#1b1613; --film-ink:#f6ede2;
+  --chip-ok:#e3f2e6; --chip-ok-ink:#2f6b45; --chip-ask:#fdebd2; --chip-ask-ink:#8a5a12;
+  --display:"Playfair Display", Georgia, "Times New Roman", serif;
+  --text:"Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --mono:ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1b1613; --paper:#27201c; --ink:#fbf4ec; --body:#bcaea2; --line:#3d332d;
+  --rose:#ff8ea8; --sage:#9ed8be; --film:#0f0c0a; --film-ink:#f6ede2;
+  --chip-ok:#1e3a2d; --chip-ok-ink:#a9e0c6; --chip-ask:#3a2e14; --chip-ask-ink:#f2c46b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1b1613; --paper:#27201c; --ink:#fbf4ec; --body:#bcaea2; --line:#3d332d;
+  --rose:#ff8ea8; --sage:#9ed8be; --film:#0f0c0a; --film-ink:#f6ede2;
+  --chip-ok:#1e3a2d; --chip-ok-ink:#a9e0c6; --chip-ask:#3a2e14; --chip-ask-ink:#f2c46b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.65 var(--text);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto;padding-block:48px 96px;display:grid;gap:72px}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.2}
+h1{font:700 clamp(34px,6vw,56px)/1.08 var(--display)}
+h2{font:700 28px/1.2 var(--display);margin-bottom:20px}
+h3{font-size:17px;font-weight:700}
+p{margin:0}
+.lede{color:var(--body);max-width:62ch;margin-top:14px;font-size:16.5px}
+.eyebrow{font:600 12px/1 var(--text);letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin-bottom:14px}
+.muted{color:var(--body)}
+code{font:13px var(--mono);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+
+/* decisions */
+.decisions{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.dec{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;align-content:start;min-width:0}
+.dec .q{font:500 12px var(--mono);color:var(--body)}
+.dec h3{font-size:15.5px}
+.dec p{font-size:14px;color:var(--body)}
+.chip{justify-self:start;font:600 11.5px/1 var(--text);padding:5px 9px;border-radius:99px;letter-spacing:.02em}
+.chip.ok{background:var(--chip-ok);color:var(--chip-ok-ink)}
+.chip.ask{background:var(--chip-ask);color:var(--chip-ask-ink)}
+
+/* film strip */
+.reel{display:grid;gap:28px}
+.scene{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0;background:var(--film);border-radius:6px;overflow:hidden;
+  box-shadow:0 12px 28px #2b211c26}
+.frame{position:relative;padding:22px 26px;background:
+  repeating-linear-gradient(90deg,transparent 0 14px,var(--film) 14px 22px) top/100% 10px no-repeat,
+  repeating-linear-gradient(90deg,transparent 0 14px,var(--film) 14px 22px) bottom/100% 10px no-repeat,#2a221d}
+.frame::before,.frame::after{content:"";position:absolute;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,#3b302a 0 8px,transparent 8px 22px);opacity:.9}
+.frame::before{top:4px}.frame::after{bottom:4px}
+.shot{position:relative;aspect-ratio:2/1;border-radius:3px;overflow:hidden;background:#3b302a;max-width:100%}
+.shot img.plate{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.95)}
+.shot .hun{position:absolute;left:7%;bottom:6%;width:22%;max-width:110px;aspect-ratio:1;border:1.5px dashed #fff8;border-radius:10px;display:grid;place-items:center;background:#0002}
+.shot .hun img{width:90%;opacity:.95}
+.shot .hun span{position:absolute;bottom:-20px;font:600 10px var(--mono);color:#fff;white-space:nowrap;text-shadow:0 1px 2px #000a}
+.shot .slate{position:absolute;top:8px;right:8px;font:600 10.5px var(--mono);color:#fff;background:#1b1613cc;padding:3px 7px;border-radius:3px}
+.shot.empty{display:grid;place-items:center;color:#f6ede2aa;font:600 12px var(--mono);text-align:center;padding:12px}
+.card{padding:24px 26px 26px;color:var(--film-ink);display:grid;gap:12px;align-content:start;min-width:0}
+.card .tc{font:600 italic 13px var(--display);color:#e9b8a3;letter-spacing:.04em}
+.card h3{font:700 24px/1.2 var(--display)}
+.card .quote{font-size:15px;color:#f6ede2e6}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:4px 0 0;font-size:13.5px}
+.card dt{color:#bcaea2;font:500 11.5px/1.9 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.card dd{margin:0;color:#f6ede2}
+.card code{background:#ffffff14;border-color:#ffffff22;color:#f6ede2}
+
+/* tables */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:640px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11.5px var(--text);text-transform:uppercase;letter-spacing:.08em;color:var(--body);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;min-width:0}
+.box ul,.box ol{margin:8px 0 0;padding-left:20px;display:grid;gap:6px;font-size:14px}
+.box li::marker{color:var(--rose)}
+
+/* ---------- STYLE UI specimen (always the film's own palette, same in both themes) ---------- */
+.ui{--k-cream:#f6ede2;--k-clay:#efe2d1;--k-ink:#2b211c;--k-body:#6b5b50;--k-rose:#d7385f;--k-rose-d:#a92646;
+  --k-sage:#8fae8b;--k-sage-d:#5f7d5c;--k-terra:#c9714a;--k-film:#1b1613;--k-mint:#e1f3ea;--k-gold:#e9b8a3;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  display:grid;gap:16px}
+.ui-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.spec{background:var(--k-cream);color:var(--k-ink);border-radius:14px;padding:22px;position:relative;overflow:hidden;min-width:0;display:grid;gap:14px;align-content:start}
+.spec::after{content:"";position:absolute;inset:0;background:var(--grain);opacity:.18;mix-blend-mode:multiply;pointer-events:none}
+.spec>*{position:relative;z-index:1}
+.spec .lbl{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--k-body)}
+.spec .note{font-size:13px;color:var(--k-body)}
+.spec.wide{grid-column:1/-1}
+/* palette */
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
+.sw div{border-radius:12px;padding:56px 10px 10px;font:600 12px/1.35 var(--text);box-shadow:inset 0 -6px 10px #0000001a,inset 0 4px 6px #ffffff40}
+.sw small{display:block;font:500 11px var(--mono);opacity:.75}
+/* type */
+.t-display{font:800 clamp(30px,5vw,46px)/1.05 var(--text);letter-spacing:-.02em}
+.t-display em{font:italic 600 1em/1 var(--display);color:var(--k-rose);letter-spacing:0}
+.t-card{font:italic 600 22px/1.3 var(--display)}
+.t-body{font-size:15.5px;color:var(--k-body);max-width:46ch}
+.t-meta{font:600 11.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--k-terra)}
+/* title card */
+.titlecard{background:var(--k-film);color:var(--k-cream);border-radius:6px;aspect-ratio:16/8;display:grid;place-items:center;text-align:center;position:relative;overflow:hidden;padding:18px;max-width:100%}
+.titlecard::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,#000a 100%)}
+.titlecard::after{content:"";position:absolute;inset:-50%;background:var(--grain);opacity:.35;animation:grain .5s steps(1) infinite}
+.titlecard .in{position:relative;z-index:1;display:grid;gap:8px;border:1.5px solid #f6ede255;padding:16px 26px;outline:1px solid #f6ede222;outline-offset:5px;animation:flick 2.5s steps(1) infinite}
+.titlecard .no{font:600 11px var(--mono);letter-spacing:.3em;color:var(--k-gold)}
+.titlecard .big{font:italic 600 clamp(22px,3.4vw,30px)/1.15 var(--display)}
+.titlecard .sub{font-size:13px;color:#f6ede2b3}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-6%,4%)}50%{transform:translate(5%,-3%)}75%{transform:translate(-3%,-6%)}}
+@keyframes flick{0%,100%{opacity:1}40%{opacity:.93}42%{opacity:1}70%{opacity:.96}}
+/* clay buttons */
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.clay-btn{font:700 15.5px var(--text);border:0;cursor:pointer;padding:15px 24px;border-radius:999px 990px 999px 985px;color:#fff;background:var(--k-rose);
+  box-shadow:inset 0 3px 3px #ffffff59,inset 0 -5px 8px #00000038,0 4px 0 var(--k-rose-d),0 10px 18px #a9264640;transition:transform .08s steps(2),box-shadow .08s steps(2)}
+.clay-btn:hover{animation:boil .33s steps(1) infinite}
+.clay-btn:active{transform:translateY(3px) scaleY(.94);box-shadow:inset 0 3px 3px #ffffff59,inset 0 -3px 6px #00000038,0 1px 0 var(--k-rose-d),0 4px 8px #a9264640}
+.clay-btn:focus-visible{outline:3px solid var(--k-ink);outline-offset:4px}
+.clay-btn.ghost{color:var(--k-ink);background:var(--k-clay);box-shadow:inset 0 3px 3px #ffffffa6,inset 0 -5px 8px #6b5b5030,0 4px 0 #d9c6ae,0 10px 18px #2b211c1f}
+.clay-chip{font:600 13px var(--text);padding:8px 14px;border-radius:14px 16px 13px 15px;background:var(--k-mint);color:#2f5a3f;box-shadow:inset 0 2px 2px #fff9,inset 0 -3px 5px #2f5a3f1f}
+.clay-chip.terra{background:#f6dccd;color:#8a4426}
+@keyframes boil{0%{transform:rotate(-.6deg) translate(0,0)}33%{transform:rotate(.4deg) translate(.6px,-.6px)}66%{transform:rotate(-.2deg) translate(-.6px,.4px)}}
+/* scene timeline nav */
+.reelnav{display:flex;gap:4px;background:var(--k-film);padding:10px;border-radius:10px;overflow-x:auto}
+.reelnav a{flex:1 0 72px;text-decoration:none;color:#f6ede299;font:600 10.5px/1.3 var(--mono);letter-spacing:.06em;padding:28px 8px 8px;border-radius:4px;background:#2a221d;position:relative}
+.reelnav a::before{content:"";position:absolute;top:8px;left:8px;right:8px;height:10px;background:repeating-linear-gradient(90deg,#3b302a 0 6px,transparent 6px 12px)}
+.reelnav a b{display:block;font:600 12.5px var(--text);color:#f6ede2;letter-spacing:0;text-transform:none}
+.reelnav a.on{background:var(--k-rose);color:#fff}
+.reelnav a.on::before{background:repeating-linear-gradient(90deg,#ffffff55 0 6px,transparent 6px 12px)}
+.reelnav a.on b{color:#fff}
+/* clay phone */
+.phone-wrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.clay-phone{width:150px;aspect-ratio:9/19;border-radius:34px 36px 33px 35px;background:linear-gradient(160deg,#b9cfb5,var(--k-sage));padding:9px;
+  box-shadow:inset 0 4px 5px #ffffff80,inset 0 -8px 12px #3c573a55,0 14px 24px #2b211c33;flex:none}
+.clay-phone .scr{height:100%;border-radius:26px;background:repeating-linear-gradient(135deg,#fffaf3 0 10px,#f4e9db 10px 20px);display:grid;place-items:center;text-align:center;
+  font:600 10.5px/1.4 var(--mono);color:var(--k-body);padding:10px;box-shadow:inset 0 2px 6px #2b211c33}
+/* ticket */
+.tickets{display:flex;gap:14px;flex-wrap:wrap}
+.ticket{flex:1 1 220px;display:grid;grid-template-columns:1fr auto;background:#fffaf3;border-radius:10px;position:relative;
+  box-shadow:inset 0 -4px 8px #6b5b5022,0 8px 18px #2b211c1f;min-width:0}
+.ticket.hot{background:var(--k-rose);color:#fff}
+.ticket .main{padding:16px 18px;display:grid;gap:4px;border-right:2px dashed #2b211c33}
+.ticket.hot .main{border-right-color:#ffffff66}
+.ticket .stub{padding:16px 14px;writing-mode:vertical-rl;transform:rotate(180deg);font:600 10.5px var(--mono);letter-spacing:.2em;text-align:center}
+.ticket::before,.ticket::after{content:"";position:absolute;right:calc(var(--stub,44px) - 9px);width:18px;height:18px;border-radius:50%;background:var(--k-cream)}
+.ticket::before{top:-9px}.ticket::after{bottom:-9px}
+.ticket .k{font:600 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.ticket .p{font:800 26px/1.1 var(--text)}
+.ticket .p small{font:500 13px var(--text);opacity:.8}
+/* texture + motion */
+.tex{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.tex div{aspect-ratio:4/3;border-radius:10px;display:grid;place-items:end start;padding:8px 10px;font:600 11px var(--mono);color:var(--k-ink);position:relative;overflow:hidden}
+.tex .g{background:var(--k-clay)}.tex .g::before{content:"";position:absolute;inset:0;background:var(--grain);opacity:.45;mix-blend-mode:multiply}
+.tex .v{background:radial-gradient(ellipse at center,var(--k-clay) 35%,#6b5b50 120%)}
+.tex .s{background:var(--k-clay);box-shadow:inset 0 6px 8px #ffffffa0,inset 0 -10px 16px #6b5b5040}
+.tex .l{background:linear-gradient(120deg,#fff3d6 0%,var(--k-clay) 45%,#d9c6ae 100%)}
+.tex span{position:relative}
+.fps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fps>div{background:var(--k-clay);border-radius:10px;padding:14px;display:grid;gap:10px}
+.lane{height:44px;position:relative;border-radius:8px;background:#fffaf3;overflow:hidden}
+.dot{position:absolute;top:8px;left:8px;width:28px;height:28px;border-radius:46% 54% 50% 50%;background:var(--k-terra);box-shadow:inset 0 3px 3px #fff8,inset 0 -4px 5px #0003}
+.dot.smooth{animation:slide 2s linear infinite alternate}
+.dot.twos{animation:slide 2s steps(24) infinite alternate,boil .166s steps(1) infinite}
+@keyframes slide{to{left:calc(100% - 36px)}}
+@media (prefers-reduced-motion:reduce){.titlecard::after,.titlecard .in,.dot,.clay-btn:hover{animation:none}}
+
+@media (max-width:760px){.scene{grid-template-columns:1fr}.frame{padding:18px 16px}.card{padding:20px 18px 22px}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Vun Vén · landing mới · bản duyệt 1</div>
+  <h1>Khéo vén, giỏi vun.<br>Một ngày của Hun, kể như phim đất sét.</h1>
+  <p class="lede">Trang này gom mọi quyết định đã chốt và những chỗ mình tự chọn. Bạn duyệt một lượt, đánh dấu chỗ muốn đổi, rồi mình bắt tay dựng. Nội dung chữ lấy nguyên từ web cũ, chỉ sắp lại theo trục thời gian trong ngày.</p>
+</header>
+
+<section>
+  <h2>Quyết định</h2>
+  <div class="decisions">
+    <div class="dec"><span class="q">Q1 · nguồn chuyển động</span><h3>Code tạo nhịp stop-motion, frame từ Codex</h3><p>Chạy 12fps (on-twos) bằng <code>steps()</code>, đạo cụ "boil" lệch ±1px mỗi frame. Đạo cụ động là chuỗi frame Codex vẽ.</p><span class="chip ok">Đã chốt</span></div>
+    <div class="dec"><span class="q">Q2 · cấu trúc</span><h3>Một phim tuyến tính, cuộn là chiếu</h3><p>Mở màn → Sáng → Trưa → Tối → Chủ nhật → Đêm → Credits. Mỗi cảnh có title card kiểu phim câm.</p><span class="chip ok">Đã chốt</span></div>
+    <div class="dec"><span class="q">Q3 · ai vẽ</span><h3>Codex CLI vẽ cảnh, đạo cụ, GIF</h3><p>Prompt lưu trong <code>art-gen/prompts/</code>, style khóa theo <code>og.jpg</code>. Asset cũ dùng tạm cho tới khi có bản mới.</p><span class="chip ok">Đã chốt</span></div>
+    <div class="dec"><span class="q">Q4 · Hun</span><h3>Hun nặn lại bằng đất sét</h3><p>Chỉ đổi chất liệu, giữ nguyên nhân dạng. Khóa model sheet trước, mọi shot sau đều dùng làm reference. Hun là lớp riêng nền trong suốt. Prompt lưu ở <code>art-gen/prompts/hun/</code> để bạn sửa.</p><span class="chip ok">Đã chốt (đổi)</span></div>
+    <div class="dec"><span class="q">Q5 · cuộn</span><h3>Desktop ghim cảnh, mobile tự chạy</h3><p>Desktop: cảnh ghim lại, cuộn để tua frame (GSAP ScrollTrigger). Mobile và reduced-motion: cuộn thường, cảnh chạy một lần khi vào khung rồi dừng ở frame cuối.</p><span class="chip ask">Mình tự chọn</span></div>
+    <div class="dec"><span class="q">Q6 · stack</span><h3>Vite + TypeScript thuần + GSAP</h3><p>Không cần React vì không còn demo app. Build ra trang tĩnh, deploy Vercel như cũ. Đạo cụ động dùng sprite sheet webp, Hun dùng clip gốc ép xuống 12fps.</p><span class="chip ask">Mình tự chọn</span></div>
+    <div class="dec"><span class="q">Q7 · demo iPhone cũ</span><h3>Bỏ demo bấm thử</h3><p>Demo cũ là bundle ~290KB, lệch chất phim. Mỗi cảnh thay bằng một "điện thoại đất sét" để ảnh màn hình app (placeholder, bạn thay sau).</p><span class="chip ask">Mình tự chọn</span></div>
+    <div class="dec"><span class="q">Q8 · chữ</span><h3>Be Vietnam Pro + Playfair Display Italic</h3><p>Giữ font thương hiệu cho nội dung. Title card dùng serif nghiêng kiểu phụ đề phim câm. Cả hai đều có dấu tiếng Việt.</p><span class="chip ask">Mình tự chọn</span></div>
+    <div class="dec"><span class="q">Q9 · sáng/tối</span><h3>Bỏ nút đổi theme</h3><p>Phim tự đi từ sáng tới đêm nên cảnh đêm tối tự nhiên. Một bộ màu duy nhất, lấy từ token cũ (kem, hồng, xanh mint).</p><span class="chip ask">Mình tự chọn</span></div>
+    <div class="dec"><span class="q">Q10 · CTA</span><h3>"Nhận tin công chiếu" qua mailto</h3><p>Giữ mailto support@tdk.best như cũ, không cần backend. Chừa sẵn chỗ để sau gắn form thật.</p><span class="chip ask">Mình tự chọn</span></div>
+    <div class="dec"><span class="q">Q11 · âm thanh</span><h3>Bản 1 không có tiếng</h3><p>Có thể thêm nút "bật tiếng máy chiếu" ở bản sau. Trình duyệt chặn tự phát âm thanh nên phải để người xem bấm.</p><span class="chip ask">Mình tự chọn</span></div>
+    <div class="dec"><span class="q">Q12 · tải trang</span><h3>Màn đầu dưới 1,5MB</h3><p>Chỉ tải trước hero. Cảnh khác lazy-load khi sắp tới. Clip Hun 0,5–1MB, ép 12fps còn khoảng một nửa.</p><span class="chip ask">Mình tự chọn</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Style UI</h2>
+  <p class="lede" style="margin:-8px 0 24px">Mọi thứ trên giao diện đều phải trông như được nặn bằng tay: cạnh hơi méo, phần nổi có bóng trong, hover thì rung nhẹ như đất sét giữa các frame. Màu lấy từ <code>og.jpg</code> cùng token cũ, thêm xanh sage của cửa chớp, cam đất nung, và đen phim cho title card. Rê chuột lên nút để xem.</p>
+  <div class="ui">
+    <div class="spec wide">
+      <span class="lbl">Bảng màu</span>
+      <div class="sw">
+        <div style="background:#f6ede2;color:#2b211c">Kem tường<small>#F6EDE2 · nền</small></div>
+        <div style="background:#efe2d1;color:#2b211c">Đất sét<small>#EFE2D1 · mặt nổi</small></div>
+        <div style="background:#2b211c;color:#f6ede2">Mực nâu<small>#2B211C · chữ</small></div>
+        <div style="background:#d7385f;color:#fff">Hồng Hun<small>#D7385F · CTA, tim Hun</small></div>
+        <div style="background:#8fae8b;color:#1b2a1a">Xanh cửa chớp<small>#8FAE8B · phụ</small></div>
+        <div style="background:#c9714a;color:#fff">Đất nung<small>#C9714A · nhãn, đạo cụ</small></div>
+        <div style="background:#e1f3ea;color:#2f5a3f">Mint<small>#E1F3EA · chip</small></div>
+        <div style="background:#1b1613;color:#f6ede2">Đen phim<small>#1B1613 · title card</small></div>
+      </div>
+    </div>
+
+    <div class="ui-grid">
+      <div class="spec">
+        <span class="lbl">Chữ</span>
+        <span class="t-meta">Cảnh 3 · Buổi tối</span>
+        <div class="t-display">Giữ ví <em>khỏe,</em><br>giữ lòng <em>nhẹ.</em></div>
+        <p class="t-body">Be Vietnam Pro 800 cho tiêu đề, chữ nhấn bằng Playfair nghiêng màu hồng. Nội dung dùng Be Vietnam Pro 400, dòng tối đa khoảng 46 ký tự.</p>
+        <div class="t-card">"Hôm nay nhà mình đã chi những gì?"</div>
+        <span class="note">Lời thoại của Hun dùng Playfair nghiêng, đặt như phụ đề phim.</span>
+      </div>
+      <div class="spec" style="background:#e9dccd">
+        <span class="lbl">Title card giữa các cảnh</span>
+        <div class="titlecard"><div class="in"><span class="no">CẢNH 03</span><span class="big">Buổi tối, giữ ví khỏe</span><span class="sub">Hôm nay nhà mình đã chi những gì?</span></div></div>
+        <span class="note">Nền đen phim, khung đôi kiểu phim câm, có grain chạy, vignette và chớp sáng nhẹ. Hiện khoảng 0,8s giữa hai cảnh.</span>
+      </div>
+    </div>
+
+    <div class="ui-grid">
+      <div class="spec">
+        <span class="lbl">Nút & chip đất sét</span>
+        <div class="row"><button class="clay-btn" type="button" id="b1">Nhận tin công chiếu</button><button class="clay-btn ghost" type="button" id="b2">Xem phim từ đầu</button></div>
+        <div class="row"><span class="clay-chip">Nhắc uống thuốc</span><span class="clay-chip">PDF gửi bác sĩ</span><span class="clay-chip terra">Giỗ theo âm lịch</span></div>
+        <span class="note">Bo góc lệch nhẹ để không tròn đều như máy làm. Có bóng trong phía trên, đáy dày kiểu khối đất. Hover thì rung 12fps, bấm thì bẹp xuống.</span>
+      </div>
+      <div class="spec">
+        <span class="lbl">Thanh điều hướng = cuộn phim</span>
+        <nav class="reelnav" aria-label="Mẫu điều hướng cảnh">
+          <a href="#" onclick="return false">00<b>Mở màn</b></a><a href="#" onclick="return false">01<b>Sáng</b></a><a href="#" onclick="return false">02<b>Trưa</b></a><a class="on" href="#" onclick="return false">03<b>Tối</b></a><a href="#" onclick="return false">04<b>Chủ nhật</b></a><a href="#" onclick="return false">05<b>Đêm</b></a><a href="#" onclick="return false">06<b>Credits</b></a>
+        </nav>
+        <span class="note">Thay cho menu cũ. Thanh dính trên đầu trang, ô đang sáng là cảnh đang chiếu, bấm vào để nhảy cảnh. Trên điện thoại, thanh cuộn ngang được.</span>
+      </div>
+    </div>
+
+    <div class="ui-grid">
+      <div class="spec">
+        <span class="lbl">Điện thoại đất sét</span>
+        <div class="phone-wrap"><div class="clay-phone"><div class="scr">ẢNH MÀN HÌNH APP<br>(bạn thay)<br>1170×2532</div></div>
+        <span class="note" style="flex:1;min-width:140px">Thay cho demo bấm thử. Vỏ màu xanh cửa chớp như một đạo cụ trong cảnh, màn hình là ảnh chụp thật của app. Đặt nghiêng khoảng 4° cạnh Hun.</span></div>
+      </div>
+      <div class="spec">
+        <span class="lbl">Hun Plus = cuống vé</span>
+        <div class="tickets">
+          <div class="ticket"><div class="main"><span class="k">Vé tháng</span><span class="p">49.000đ <small>/tháng</small></span><span class="note">Huỷ lúc nào cũng được</span></div><div class="stub">HUN PLUS</div></div>
+          <div class="ticket hot"><div class="main"><span class="k">Vé năm · 14 ngày thử</span><span class="p">399.000đ <small>/năm</small></span><span style="font-size:13px;opacity:.85">≈ 33.000đ/tháng</span></div><div class="stub">HUN PLUS</div></div>
+        </div>
+        <span class="note">Đường xé nét đứt, hai lỗ khuyết ở chỗ xé. Gói Năm nổi bằng màu hồng.</span>
+      </div>
+    </div>
+
+    <div class="ui-grid">
+      <div class="spec">
+        <span class="lbl">Chất liệu</span>
+        <div class="tex"><div class="g"><span>Grain phim</span></div><div class="v"><span>Vignette</span></div><div class="s"><span>Khối đất nổi</span></div><div class="l"><span>Nắng cửa sổ</span></div></div>
+        <span class="note">Grain phủ toàn trang ở mức rất nhẹ. Vignette chỉ dùng ở title card và cảnh đêm.</span>
+      </div>
+      <div class="spec">
+        <span class="lbl">Nhịp chuyển động</span>
+        <div class="fps">
+          <div><span class="note">Mượt 60fps (không dùng)</span><div class="lane"><span class="dot smooth"></span></div></div>
+          <div><span class="note">On-twos 12fps + rung (dùng)</span><div class="lane"><span class="dot twos"></span></div></div>
+        </div>
+        <span class="note">Mọi chuyển động trên trang dùng <code>steps()</code>, kể cả hover và chuyển cảnh. Bật reduced-motion thì đứng yên ở frame cuối.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Storyboard</h2>
+  <p class="lede" style="margin:-8px 0 24px">Ảnh trong khung là asset cũ dùng tạm. Khung nét đứt là chỗ của Hun. Codex sẽ vẽ lại tấm nền và đạo cụ theo style đất sét.</p>
+  <div class="reel">
+
+    <article class="scene">
+      <div class="frame"><div class="shot"><img class="plate" src="img/og.jpg" alt="Tấm nền mở màn: góc cửa sổ đất sét với bánh mì và ấm trà"><div class="hun"><img src="img/hun-welcome.webp" alt=""><span>HUN · welcome-hero</span></div><span class="slate">00 · MỞ MÀN</span></div></div>
+      <div class="card">
+        <span class="tc">Vun Vén trình chiếu</span>
+        <h3>Khéo vén, giỏi vun.</h3>
+        <p class="quote">"Từ chuyện chi tiêu đến sức khỏe, nhà mình cùng chăm chút mỗi ngày. Có Hun bên cạnh, mình vun vén từng chút."</p>
+        <dl><dt>Chuyển động</dt><dd>Rèm vải đất sét kéo ra theo từng frame, ánh đèn chiếu loé lên, Hun bước vào.</dd>
+        <dt>Codex vẽ</dt><dd>Tấm nền góc nhà, chuỗi frame rèm mở (8 frame)</dd>
+        <dt>Nội dung</dt><dd>Hero, 3 trụ: giữ ví khỏe · giữ người khỏe · giữ lòng nhẹ, CTA</dd></dl>
+      </div>
+    </article>
+
+    <article class="scene">
+      <div class="frame"><div class="shot"><img class="plate" src="img/home-morning.webp" alt="Tấm nền buổi sáng"><div class="hun"><img src="img/hun-idle.webp" alt=""><span>HUN · idle-look</span></div><span class="slate">01 · SÁNG</span></div></div>
+      <div class="card">
+        <span class="tc">Cảnh 1 · Buổi sáng</span>
+        <h3>Giữ lòng nhẹ</h3>
+        <p class="quote">"Sáng nay, lòng mình thấy sao?" Dành chút thời gian nghe lòng mình.</p>
+        <dl><dt>Chuyển động</dt><dd>Hơi trà bốc lên, 7 mặt cảm xúc bằng đất sét lần lượt lật lên như bài.</dd>
+        <dt>Codex vẽ</dt><dd>Tấm nền cửa sổ sáng, hơi trà (6 frame lặp), 7 mặt cảm xúc</dd>
+        <dt>Tính năng</dt><dd>Tinh thần: thang 7 mức, gọi tên cảm xúc, mặc định chỉ mình bạn xem</dd></dl>
+      </div>
+    </article>
+
+    <article class="scene">
+      <div class="frame"><div class="shot"><img class="plate" src="img/home-noon.webp" alt="Tấm nền buổi trưa"><div class="hun"><img src="img/hun-pill.webp" alt=""><span>HUN · pill</span></div><span class="slate">02 · TRƯA</span></div></div>
+      <div class="card">
+        <span class="tc">Cảnh 2 · Buổi trưa</span>
+        <h3>Giữ người khỏe</h3>
+        <p class="quote">"Trưa rồi, mình ghi lại số đo nha." · "Ở xa, vẫn chăm ba mẹ."</p>
+        <dl><dt>Chuyển động</dt><dd>Hộp thuốc chia ngày mở từng ngăn, kim máy đo huyết áp nhích.</dd>
+        <dt>Codex vẽ</dt><dd>Tấm nền bàn trưa, hộp thuốc 7 ngăn (8 frame), máy đo, cân</dd>
+        <dt>Tính năng</dt><dd>Đường huyết, HbA1c, huyết áp, cân nặng · nhắc uống thuốc · PDF gửi bác sĩ · ba mẹ không cần cài app</dd></dl>
+      </div>
+    </article>
+
+    <article class="scene">
+      <div class="frame"><div class="shot"><img class="plate" src="img/home-evening.webp" alt="Tấm nền buổi tối"><div class="hun"><img src="img/hun-coins.webp" alt=""><span>HUN · coins</span></div><span class="slate">03 · TỐI</span></div></div>
+      <div class="card">
+        <span class="tc">Cảnh 3 · Buổi tối</span>
+        <h3>Giữ ví khỏe</h3>
+        <p class="quote">"Hôm nay nhà mình đã chi những gì?" Dán tin ngân hàng để ghi nhanh hơn.</p>
+        <dl><dt>Chuyển động</dt><dd>Xu đất sét rơi vào hũ, hũ nảy nhẹ, cuốn sổ lật trang. Đang chạy thử.</dd>
+        <dt>Codex vẽ</dt><dd>Tấm nền bàn tối, xu rơi (8 frame), điện thoại đất sét hiện tin ngân hàng</dd>
+        <dt>Tính năng</dt><dd>Ghi thu chi, ngân sách theo nhịp, không liên kết ngân hàng, không hỏi OTP</dd></dl>
+      </div>
+    </article>
+
+    <article class="scene">
+      <div class="frame"><div class="shot"><img class="plate" src="img/invite-partner.webp" alt="Tấm nền mời người thương"><div class="hun"><img src="img/hun-review.webp" alt=""><span>HUN · review</span></div><span class="slate">04 · CHỦ NHẬT</span></div></div>
+      <div class="card">
+        <span class="tc">Cảnh 4 · Chủ nhật</span>
+        <h3>Ngồi lại cùng nhau</h3>
+        <p class="quote">"Mình ngồi lại, xem tuần qua ra sao." · "Có nhau rồi, chuyện nhà mình cùng lo."</p>
+        <dl><dt>Chuyển động</dt><dd>Cột biểu đồ đất sét mọc lên từng nấc, lịch âm treo tường lật trang.</dd>
+        <dt>Codex vẽ</dt><dd>Tấm nền bàn tròn gia đình, cột biểu đồ (6 frame), lịch âm</dd>
+        <dt>Tính năng</dt><dd>Nhìn lại tuần, kế hoạch tuần tới · mời người thương bằng mã hoặc QR · hồ sơ cho con, ba mẹ · giỗ, sinh nhật theo âm lịch</dd></dl>
+      </div>
+    </article>
+
+    <article class="scene">
+      <div class="frame"><div class="shot"><img class="plate" src="img/home-night.webp" alt="Tấm nền ban đêm"><div class="hun"><img src="img/hun-lock.webp" alt=""><span>HUN · lock-key → night-sleepy</span></div><span class="slate">05 · ĐÊM</span></div></div>
+      <div class="card">
+        <span class="tc">Cảnh 5 · Ban đêm</span>
+        <h3>Giữ chuyện nhà mình</h3>
+        <p class="quote">"Chuyện riêng của bạn, Hun giữ cẩn thận."</p>
+        <dl><dt>Chuyển động</dt><dd>Nhật ký gập lại, ổ khoá sập, đèn ngủ tắt dần, Hun ngáp.</dd>
+        <dt>Codex vẽ</dt><dd>Tấm nền phòng đêm, nhật ký có khoá (6 frame), đèn ngủ tắt</dd>
+        <dt>Tính năng</dt><dd>Góc riêng · AI mặc định tắt · không quảng cáo, không bán dữ liệu</dd></dl>
+      </div>
+    </article>
+
+    <article class="scene">
+      <div class="frame"><div class="shot empty">Tấm nền chưa có<br>(Codex vẽ: vé xem phim bằng đất sét, bảng credits)<span class="slate">06 · CREDITS</span></div></div>
+      <div class="card">
+        <span class="tc">Hết phim · Hậu trường</span>
+        <h3>Vé Hun Plus, hỏi đáp, công chiếu</h3>
+        <p class="quote">"Mai mình lại chăm chút cho nhà mình."</p>
+        <dl><dt>Hun Plus</dt><dd>Hai cuống vé: Gói Tháng 49.000đ · Gói Năm 399.000đ. Chưa mở bán, mọi tính năng vẫn miễn phí.</dd>
+        <dt>Hỏi đáp</dt><dd>7 câu từ web cũ, đặt dưới tiêu đề "Hậu trường"</dd>
+        <dt>Kết</dt><dd>"Sắp công chiếu trên iPhone" + Nhận tin công chiếu · pháp lý · support</dd></dl>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section>
+  <h2>Codex chạy thử</h2>
+  <p class="lede" style="margin:-8px 0 24px">Hai bài test: tấm nền cảnh "Giữ ví khỏe" và chuỗi 8 frame xu rơi vào hũ. Bên dưới là bản nén cho web. GIF gốc 5,6MB, đổi sang webp động còn 88KB.</p>
+  <div class="cols">
+    <figure class="box" style="margin:0;display:grid;gap:12px">
+      <img src="img/test-scene1-v2.webp" alt="Tấm nền v2: bàn đất sét, hũ xu đất nung, sổ, cà phê sữa đá, cây, cửa chớp xanh, xe máy ngoài phố" style="border-radius:8px;width:100%">
+      <figcaption style="font-size:14px;display:grid;gap:6px">
+        <span class="chip ok">v2 · đạt</span>
+        <span>Lần chạy này có kèm style lock. Mọi thứ đều là đất sét, pastel lì, cửa chớp và xe máy giống hệt <code>og.jpg</code>. Vẫn chừa trống 1/3 trái cho Hun và tường trống cho tiêu đề. Prompt này sẽ làm chuẩn cho cả bộ.</span>
+        <details><summary style="cursor:pointer;color:var(--body)">So với v1 (chưa có style lock)</summary>
+          <img src="img/test-scene1.webp" alt="Tấm nền v1, màu cam vàng, trông như ảnh thật" style="border-radius:8px;width:100%;margin-top:8px">
+          <span class="muted">v1 ngả cam vàng, gỗ và cây trông như thật, không ra chất đất sét.</span>
+        </details>
+      </figcaption>
+    </figure>
+    <figure class="box" style="margin:0;display:grid;gap:12px">
+      <img src="img/test-coin.webp" alt="Chuỗi frame stop-motion: xu đất sét rơi vào hũ" style="border-radius:8px;width:100%;max-width:360px;justify-self:center">
+      <figcaption style="font-size:14px;display:grid;gap:6px">
+        <span class="chip ok">Bất ngờ là tốt</span>
+        <span>8 frame giữ được camera và hũ gần như y hệt nhau. Hũ chỉ "rung" rất nhẹ giữa các frame, đúng chất stop-motion. Hướng đi này dùng được.</span>
+        <span class="chip ask">Cần chỉnh</span>
+        <span>Xu quá nhỏ, hũ gần như không bẹp lúc xu rơi vào. Sẽ xin 10–12 frame, xu to hơn, cho hũ nảy rõ hơn.</span>
+      </figcaption>
+    </figure>
+  </div>
+  <div class="box" style="margin-top:16px">
+    <h3>Prompt gốc sẽ thêm</h3>
+    <ul>
+      <li>"plasticine / modelling clay miniature, every surface hand-sculpted, visible fingerprints, no real wood or real plants, everything made of clay"</li>
+      <li>"muted pastel palette: cream #F6EDE2, sage #8FAE8B, terracotta #C9714A; soft diffused light; low saturation; no orange/yellow cast"</li>
+      <li>Luôn đính kèm <code>og.jpg</code> làm style lock, ghi rõ "match og.jpg more than the other reference".</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Hun đất sét</h2>
+  <p class="lede" style="margin:-8px 0 24px">Hun được nặn lại bằng đất sét để hợp với cảnh. Chỉ đổi chất liệu, giữ nguyên hình dáng, màu, trái tim, chỏm tóc. Bản model sheet này sẽ là reference bắt buộc cho mọi shot có Hun.</p>
+  <div class="box" style="display:grid;gap:14px">
+    <div style="display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:16px;align-items:center">
+      <figure style="margin:0;text-align:center"><img src="img/hun-orig-3q.webp" alt="Hun gốc, 3D bóng mịn" style="width:100%;background:#fff;border-radius:10px"><figcaption class="muted" style="font-size:12.5px;margin-top:6px">Hun gốc</figcaption></figure>
+      <figure style="margin:0;text-align:center"><img src="img/hun-model-sheet.webp" alt="Model sheet Hun đất sét: chính diện, 3/4, nghiêng, sau lưng" style="width:100%;border-radius:10px"><figcaption class="muted" style="font-size:12.5px;margin-top:6px">Hun đất sét: chính diện · 3/4 · nghiêng · sau lưng</figcaption></figure>
+    </div>
+    <div style="display:grid;gap:6px;font-size:14px">
+      <span class="chip ok">Giữ đúng</span>
+      <span>Thân tròn, lưng xám tím, chỏm tóc ba lá, mặt và bụng kem, má hồng, mỏ cam, trái tim hồng, chân cam. Bề mặt lì, có dấu tay, hợp với tấm nền v2.</span>
+      <span class="chip ask">Bạn xem giúp</span>
+      <span>1) Góc nghiêng hơi lệch: vẫn thấy một phần trái tim, mắt nằm hơi trước. 2) Mắt không còn chấm sáng to như bản gốc. 3) Màu lưng hơi ngả tím hơn bản gốc. Ba chỗ này sửa được bằng prompt nếu bạn muốn giữ chặt hơn.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Shot điện ảnh: Hun đóng vai chính</h2>
+  <p class="lede" style="margin:-8px 0 24px">Học cách đánh sáng và cách quay từ phim ngắn đề cử Oscar mà bạn gửi, giữ chất liệu đất sét. Khung 2.39:1, nắng hoàng hôn ngược sáng tạo viền sáng quanh Hun, bóng xanh tím, đèn bàn ấm, hậu cảnh mờ bokeh.</p>
+  <figure class="box" style="margin:0;display:grid;gap:12px">
+    <img src="img/test-cine.webp" alt="Hun đất sét đẩy đồng xu vào hũ đất nung hoa sen, nắng hoàng hôn ngoài cửa sổ, đèn bàn ấm" style="border-radius:8px;width:100%">
+    <figcaption style="font-size:14px;display:grid;gap:6px">
+      <span class="chip ok">Đạt</span>
+      <span>Hun giữ đúng nhân dạng theo model sheet và đang "diễn": tay đẩy xu, mặt tự hào. Hũ có hoa sen, xe máy và cửa chớp ngoài phố, chất Việt rõ. Ánh sáng có chiều sâu, ra cảm giác phim hơn hẳn bản pastel.</span>
+      <span class="chip ask">Để ý</span>
+      <span>Lưng Hun ngả tím mận hơn bản gốc (giống model sheet). Ảnh này vẽ Hun dính vào cảnh nên Hun không cử động riêng được. Nếu chọn hướng này, mỗi shot là một ảnh hoàn chỉnh và chuyển động là chuỗi frame của cả shot.</span>
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Cần cải thiện trước khi vẽ hàng loạt</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Vấn đề</th><th>Cách xử lý</th></tr></thead>
+    <tbody>
+      <tr><td>Mobile bị cắt hai bên</td><td>Mỗi cảnh vẽ thêm một bản dọc 9:16. Desktop dùng 16:9, điện thoại dùng 9:16.</td></tr>
+      <tr><td>Đồ vật dính chết vào tấm nền</td><td>Vẽ tấm nền trống, đồ vật thành lớp riêng nền trong suốt để chuyển động và tạo chiều sâu khi cuộn.</td></tr>
+      <tr><td>Ánh sáng chưa theo giờ</td><td>Thêm một dòng ánh sáng riêng cho mỗi cảnh: sáng mát, trưa trắng, tối hồng cam nhạt, đêm xanh đèn ngủ.</td></tr>
+      <tr><td>6 tấm rời nhau</td><td>Viết một mô tả bối cảnh chung: cùng một căn nhà, cùng cửa chớp, cùng bàn, máy quay đi qua các góc.</td></tr>
+      <tr><td>Hun dán đè trông giả</td><td>Hun là lớp riêng, có bóng tiếp xúc vẽ bằng code, ánh sáng của Hun theo màu ánh sáng của từng cảnh.</td></tr>
+      <tr><td>Xu rơi chưa đã</td><td>Xu to hơn, hũ bẹp rõ hơn, 10–12 frame.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Sản xuất asset</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Loại</th><th>Ai làm</th><th>Lưu ở</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td>Tấm nền 6 cảnh (16:9)</td><td>Codex</td><td><code>public/scenes/</code></td><td>Chừa trống 1/3 trái cho Hun, góc trên trái để tiêu đề</td></tr>
+      <tr><td>Đạo cụ động (6–8 frame)</td><td>Codex → sprite webp</td><td><code>public/props/</code></td><td>Giữ nguyên camera và ánh sáng giữa các frame. Chạy 12fps.</td></tr>
+      <tr><td>Hun đất sét (pose + frame)</td><td>Codex, bạn duyệt</td><td><code>public/hun/</code></td><td>Model sheet là reference bắt buộc. Nền trong suốt. Prompt ở <code>art-gen/prompts/hun/</code>.</td></tr>
+      <tr><td>Ảnh màn hình app</td><td>Bạn</td><td><code>public/screens/</code></td><td>Placeholder trong điện thoại đất sét</td></tr>
+      <tr><td>Icon nhỏ (arrow, plus, clock)</td><td>Mình</td><td>SVG inline</td><td>File thiếu trên web cũ</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="cols">
+  <div class="box">
+    <h3>Bạn duyệt giúp</h3>
+    <ol>
+      <li>Thứ tự cảnh: tinh thần sáng, sức khỏe trưa, chi tiêu tối. Giữ như web cũ hay đổi?</li>
+      <li>Bỏ demo iPhone bấm thử có ổn không?</li>
+      <li>Hun Plus trình bày như cuống vé xem phim có ổn không?</li>
+      <li>Các mục "Mình tự chọn" ở trên.</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h3>Sau khi duyệt</h3>
+    <ol>
+      <li>Chạy lại cảnh thử với prompt gốc đã chỉnh, tới khi khớp <code>og.jpg</code>.</li>
+      <li>Viết toàn bộ prompt cảnh, đạo cụ và Hun vào <code>art-gen/prompts/</code>.</li>
+      <li>Dựng khung site bằng asset cũ trong lúc Codex vẽ.</li>
+      <li>Thay asset mới vào từng cảnh.</li>
+    </ol>
+  </div>
+</section>
+
+</div>

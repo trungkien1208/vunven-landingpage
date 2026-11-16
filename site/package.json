@@ -1,0 +1,28 @@
+{
+  "name": "site",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/assets.mjs && tsc && vite build",
+    "preview": "vite preview",
+    "assets": "node scripts/assets.mjs"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.6",
+    "puppeteer-core": "^25.17.0",
+    "sharp": "^0.35.5",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.6"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource/baloo-2": "^5.3.0",
+    "@fontsource/be-vietnam-pro": "^5.3.0",
+    "@fontsource/itim": "^5.3.0",
+    "@phosphor-icons/core": "^2.1.1",
+    "gsap": "^3.15.1",
+    "qrcode": "^1.5.4"
+  }
+}

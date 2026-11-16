@@ -1,0 +1,14 @@
+Generate ONE image with your image generation tool and save it as PNG to art-gen/test/scene1-ven-vi-v2.png. Do not write any other files or code.
+
+STYLE LOCK (prepend to every scene/prop prompt). Attach reference/original/og.jpg as the PRIMARY style reference.
+
+Plasticine / modelling-clay miniature set, photographed like a stop-motion film frame.
+Every surface is hand-sculpted clay: visible fingerprints, thumb smudges, soft tool marks, slightly lumpy edges. No real wood, no real plants, no real glass, no photographic textures: wood, leaves, liquid and paper are all modelled in clay.
+Muted pastel palette: warm cream walls #F6EDE2, sage green #8FAE8B, terracotta #C9714A, soft brown. Low saturation, matte surfaces, gentle diffused window light, soft shadows. No orange or yellow colour cast, no golden-hour glow.
+Shallow depth of field like a macro lens on a tabletop set. Cozy Vietnamese home details.
+Match og.jpg more closely than any other reference.
+No characters, no animals, no penguin, no people, no text, no logos.
+
+Scene 3 "Giữ ví khỏe" (evening, but keep the light soft and neutral): a small chunky clay table by a window with sage-green clay shutters. On the table: a round terracotta clay coin jar with a slot, a short stack of clay coins, a small open clay notebook with a clay pencil, a clay glass of cà phê sữa đá, a small clay plant in a cream pot. Background: soft blurred clay street with pastel houses.
+Leave clear empty table space on the LEFT third (a mascot will be composited there) and calm empty wall top-left for a headline.
+16:9 landscape.

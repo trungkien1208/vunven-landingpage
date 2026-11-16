@@ -1,0 +1,189 @@
+<title>Kịch bản Vun Vén v2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Quicksand:wght@500;600;700&family=Itim&display=swap">
+<style>
+/* Layout: a screenplay you can review in one pass — logline, devices, cast, then five chapters as shot rows, then trailer + credits. */
+:root{
+  color-scheme:light;
+  --cream:#f6ede2; --clay:#efe2d1; --paper:#fffaf3; --ink:#3a2a22; --body:#7a665a; --line:#e6d6c3;
+  --rose:#e2577a; --sage:#8fae8b; --gold:#c08a3e; --film:#1f1915;
+  --f-head:"Baloo 2","Quicksand",system-ui,sans-serif; --f-body:"Quicksand",system-ui,sans-serif; --f-voice:"Itim","Quicksand",cursive;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font:500 16px/1.6 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-head);font-weight:800;margin:0;line-height:1.1;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-block:48px 96px;display:grid;gap:64px}
+.k{font:700 12px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--rose)}
+header h1{font-size:clamp(36px,5.4vw,64px);margin-top:8px}
+.logline{margin-top:18px;font:400 clamp(19px,2vw,23px)/1.5 var(--f-voice);max-width:60ch}
+.card{background:var(--paper);border:2.5px solid var(--ink);border-radius:20px 24px 18px 26px;box-shadow:4px 5px 0 var(--ink);padding:18px 22px}
+h2{font-size:clamp(26px,3vw,36px);margin-bottom:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:14px}
+.grid3 .card h3{font-size:20px;margin-bottom:6px}
+.grid3 .card p{color:var(--body);font-size:14.5px}
+.src{display:inline-block;margin-top:8px;font:600 12px var(--mono);color:var(--body);background:var(--cream);padding:3px 7px;border-radius:6px}
+.cast{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:12px}
+.who{display:flex;gap:12px;align-items:center;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:12px 14px}
+.who .sw{width:40px;height:40px;border-radius:12px;flex:none;border:2px solid var(--ink)}
+.who b{font-family:var(--f-head);font-size:17px;display:block}
+.who span{font-size:13.5px;color:var(--body)}
+.rule{border-left:6px solid var(--rose);background:var(--paper);border-radius:10px;padding:12px 16px;font-size:15px}
+.rule b{font-family:var(--f-head)}
+
+.poster{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:16/8;box-shadow:0 0 0 2.5px var(--ink),5px 6px 0 var(--ink);background:var(--film);max-width:100%}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 35%;opacity:.55;filter:saturate(.9)}
+.poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,#1f1915e6)}
+.poster .pt{position:absolute;z-index:1;left:0;right:0;bottom:6%;text-align:center;color:#fff8ec;display:grid;gap:4px;justify-items:center;padding:0 16px}
+.poster .pt b{font:800 clamp(40px,8vw,96px)/.9 var(--f-head);letter-spacing:.08em}
+.poster .pt span{font:400 clamp(16px,2vw,22px) var(--f-voice)}
+.poster .pt small{font:700 11px var(--f-body);letter-spacing:.18em;text-transform:uppercase;opacity:.8}
+.poster .brief{position:absolute;z-index:1;left:16px;top:16px;max-width:420px;background:#fffaf3ee;color:var(--ink);border:2px solid var(--ink);border-radius:14px;padding:10px 14px;font-size:13.5px}
+
+.chapter{display:grid;gap:14px}
+.ch-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px}
+.ch-head .num{font:800 64px/.8 var(--f-head);color:var(--rose)}
+.ch-head .time{font:700 14px var(--mono);background:var(--ink);color:var(--paper);padding:4px 9px;border-radius:7px}
+.ch-head h3{font-size:clamp(26px,3vw,34px)}
+.ch-head .feat{font:700 13px var(--f-body);color:#8a4426;background:#f6dccd;padding:5px 11px;border-radius:999px}
+.shots{display:grid;gap:10px}
+.shot{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(0,.9fr);gap:14px;align-items:start;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:14px 16px}
+.shot .id{font:800 22px/1 var(--f-head);color:var(--ink)}
+.shot .id small{display:block;margin-top:6px;font:700 10.5px var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;border-radius:6px;width:max-content}
+.redo{background:#fde7ea;color:#9c2c49}.keep{background:#e3f5e6;color:#2f6b45}.new{background:#ece6f7;color:#5a4691}
+.shot .act{font-size:15px}
+.shot .meta{display:grid;gap:8px}
+.sub{font:400 18px/1.4 var(--f-voice);background:var(--film);color:#fff8ec;padding:8px 12px;border-radius:10px}
+.sub.mute{background:transparent;color:var(--body);border:2px dashed var(--line);font-size:15px}
+.featcopy{font-size:15.5px;color:var(--body);max-width:68ch;margin-top:-4px}
+.app{font-size:13px;color:var(--body)}
+.app b{color:var(--ink)}
+.ref{display:flex;gap:10px;align-items:center;font-size:12.5px;color:var(--body)}
+.ref img{width:112px;aspect-ratio:16/9;object-fit:cover;border-radius:8px;border:2px solid var(--line);flex:none}
+.why{font-size:13px;color:#9c2c49;font-weight:700}
+.trailer{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.trailer span{font:700 14px var(--mono);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:6px 10px}
+.trailer i{font-style:normal;color:var(--body)}
+.trailer .tc{background:var(--film);color:#fff8ec;font-family:var(--f-voice);font-size:15px}
+.credits{background:var(--film);color:#fff8ec;border-radius:18px;padding:28px;text-align:center;display:grid;gap:6px;font:600 15px/1.7 var(--f-body)}
+.credits b{font-family:var(--f-head);color:#f2c8a8;letter-spacing:.06em}
+.next{display:grid;gap:10px}
+.next ol{margin:0;padding-left:22px;display:grid;gap:6px}
+@media (max-width:760px){.shot{grid-template-columns:1fr}.ref img{width:96px}}
+</style>
+
+<div class="wrap">
+<header>
+  <span class="k">Kịch bản v3 · phương án A · viết lại lời thoại</span>
+  <h1>Vun Vén: một ngày bình thường</h1>
+  <p class="logline">Một ngày bình thường trong một căn nhà bình thường. Ai cũng bận việc của mình. Chỉ có Hun để ý tới mấy việc nhỏ.</p>
+  <div class="card" style="margin-top:18px;max-width:780px"><b style="font-family:var(--f-head)">Giọng phim:</b> Hun không nói câu nào, chỉ làm. Phụ đề là lời người nhà nói vu vơ, và nhiều shot không có lời. Phần giới thiệu tính năng nằm riêng bên cạnh, viết thẳng như mô tả sản phẩm.</div>
+</header>
+
+<section>
+  <h2>Sợi chỉ xuyên suốt</h2>
+  <div class="grid3">
+    <div class="card"><h3>Bảng "4 việc nhỏ"</h3><p>Tấm bảng đất sét treo ở bếp, 4 ô icon: trái tim, viên thuốc, đồng xu, ngôi nhà. Mỗi chương Hun gạch một ô. Người xem thấy một ngày "tiến triển".</p><span class="src">App: "Hôm nay mình có 4 việc nhỏ"</span></div>
+    <div class="card"><h3>Hũ cá</h3><p>Xong mỗi việc, Hun bỏ một con cá đất sét vào hũ. Cuối phim hũ đầy, Hun ngủ cạnh hũ. Chi tiết dễ thương, đúng phần thưởng của app.</p><span class="src">App: "Xong rồi, bạn nhận 10 cá"</span></div>
+    <div class="card"><h3>Giờ thay cho "buổi"</h3><p>Mỗi chương mở bằng giờ: 06:30, 12:00, 17:45, CN 19:00, 22:30. Không dùng chữ "cảnh", không dùng "buổi sáng/trưa".</p><span class="src">Theo góp ý của bạn</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Diễn viên</h2>
+  <div class="cast">
+    <div class="who"><span class="sw" style="background:#50454f"></span><div><b>Hun</b><span>Model sheet v2. Vai chính, người lặng lẽ vun vén.</span></div></div>
+    <div class="who"><span class="sw" style="background:#8fae8b"></span><div><b>Mẹ</b><span>Chỉ thấy tay, tay áo cardigan xanh sage, vòng ngọc.</span></div></div>
+    <div class="who"><span class="sw" style="background:repeating-linear-gradient(90deg,#2f4a6d 0 5px,#e9eef5 5px 9px)"></span><div><b>Ba</b><span>Tay áo sơ mi kẻ navy, đồng hồ, kính gọng nâu.</span></div></div>
+    <div class="who"><span class="sw" style="background:#e0b44a"></span><div><b>Bé</b><span>Bàn tay nhỏ, tay áo vàng mù tạt, dép hồng.</span></div></div>
+    <div class="who"><span class="sw" style="background:#c9714a"></span><div><b>Ông bà ở quê</b><span>Chỉ qua đồ vật: ảnh nhà ở quê, gói quà, trái tim trên điện thoại.</span></div></div>
+  </div>
+  <div class="grid3" style="margin-top:14px">
+    <p class="rule"><b>Luật giải phẫu của Hun:</b> vây ngắn và mập, không bao giờ duỗi dài, không có cánh tay. Hun ôm đồ vào bụng, đẩy bằng cả thân, đứng lên ghế đẩu để với, hoặc dùng mỏ. Đồ Hun cầm phải nhỏ và nằm sát người.</p>
+    <p class="rule"><b>Luật người nhà:</b> không bao giờ thấy mặt, chỉ thấy tay, tay áo, dáng lưng, đồ vật riêng. Cùng màu tay áo ở mọi shot để người xem nhận ra ai là ai.</p>
+    <p class="rule"><b>Không chữ trong ảnh:</b> lịch, sổ, điện thoại, bảng chỉ dùng icon và hình khối. Chữ do trang web đặt lên.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Mở đầu: poster</h2>
+  <div class="poster"><img src="img/00c.webp" alt="Ảnh tạm cho vị trí poster">
+    <div class="brief"><b>Key art cần vẽ:</b> Hun đứng giữa con hẻm lúc bình minh, ôm vào lòng một mô hình ngôi nhà đất sét nhỏ có cửa chớp xanh, nắng ngược tạo viền sáng. Phía sau, cửa nhà hé mở, một bàn tay áo xanh sage vẫy. Chừa 1/3 dưới cho chữ. Bản 16:9 và 4:5.</div>
+    <div class="pt"><small>Một phim đất sét</small><b>VUN VÉN</b><span>khéo vén · giỏi vun</span><small>Sắp có trên iPhone</small></div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="ch-head"><span class="num">01</span><span class="time">06:30</span><h3>Cà phê sáng</h3><span class="feat">Cảm xúc</span></div>
+  <p class="featcopy">Ghi lại cảm xúc mỗi ngày. Bảy mức, gọi tên được, mặc định chỉ mình bạn xem.</p>
+  <div class="shots">
+    <div class="shot"><div class="id">1A<small class="new">vẽ mới</small></div><p class="act">Bếp lúc trời vừa sáng. Ấm nước bắt đầu reo. Hun đứng trên ghế đẩu, dùng mỏ lật tấm bảng 4 việc ra ngoài. Hũ cá còn trống trên kệ.</p><div class="meta"><p class="sub mute">(không lời)</p><p class="app"><b>Màn app:</b> Tổ Ấm, 4 việc hôm nay</p></div></div>
+    <div class="shot"><div class="id">1B<small class="redo">vẽ lại</small></div><p class="act">Bàn ăn sáng. Tay mẹ ôm tách cà phê, chưa uống. Hun dùng cả thân đẩy tới một khay gỗ có 7 viên đá cảm xúc, từ buồn tới vui.</p><div class="meta"><p class="sub">Mẹ: "Hôm nay chắc lại dài lắm đây…"</p><p class="app"><b>Màn app:</b> chọn mức cảm xúc</p><div class="ref"><img src="img/01b.webp" alt=""><span class="why">Bản cũ: Hun với tay dài ra, trông ghê. Bản mới: mẹ là người chọn.</span></div></div></div>
+    <div class="shot"><div class="id">1C<small class="new">vẽ mới</small></div><p class="act">Cận. Ngón tay mẹ chạm viên thứ năm. Mẹ cầm tách lên uống. Hun lặng lẽ gạch ô trái tim trên bảng.</p><div class="meta"><p class="sub">Mẹ: "Ừ, cũng tạm."</p><p class="app"><b>Màn app:</b> gọi tên cảm xúc · chỉ mình bạn xem</p></div></div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="ch-head"><span class="num">02</span><span class="time">12:00</span><h3>Giờ uống thuốc</h3><span class="feat">Sức khỏe</span></div>
+  <p class="featcopy">Nhắc thuốc, ghi huyết áp, đường huyết, cân nặng. Ghi giúp ba mẹ ở xa mà họ không cần cài app.</p>
+  <div class="shots">
+    <div class="shot"><div class="id">2A<small class="redo">vẽ lại</small></div><p class="act">Đồng hồ treo tường chỉ 12 giờ. Điện thoại trên kệ rung, màn hình hiện icon chuông và viên thuốc. Chỏm tóc của Hun dựng lên.</p><div class="meta"><p class="sub mute">(không lời)</p><p class="app"><b>Màn app:</b> thông báo nhắc thuốc</p></div></div>
+    <div class="shot"><div class="id">2B<small class="new">vẽ mới</small></div><p class="act">Tay ba (sơ mi kẻ navy, đồng hồ) đang lật tờ báo. Hun đẩy hộp thuốc 7 ngăn tới sát tay ba, ngăn hôm nay mở sẵn.</p><div class="meta"><p class="sub">Ba: "Biết rồi, biết rồi. Uống liền đây."</p><p class="app"><b>Màn app:</b> lịch thuốc trong tuần</p></div></div>
+    <div class="shot"><div class="id">2C<small class="redo">vẽ lại</small></div><p class="act">Máy đo huyết áp hiện trái tim xanh. Điện thoại dựng trên giá hiện ảnh căn nhà ở quê. Hun ôm điện thoại vào bụng. Ô viên thuốc được gạch.</p><div class="meta"><p class="sub">Bà (qua điện thoại): "Ba con dạo này khỏe không?"</p><p class="app"><b>Màn app:</b> ghi giúp số đo · PDF gửi bác sĩ</p></div></div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="ch-head"><span class="num">03</span><span class="time">17:45</span><h3>Đi chợ về</h3><span class="feat">Chi tiêu</span></div>
+  <p class="featcopy">Dán tin nhắn ngân hàng, app tự điền khoản chi. Không liên kết tài khoản, không hỏi OTP.</p>
+  <div class="shots">
+    <div class="shot"><div class="id">3A<small class="new">vẽ mới</small></div><p class="act">Cửa bếp, nắng chiều. Tay mẹ đặt giỏ chợ đầy rau và ổ bánh mì lên bàn. Điện thoại sáng lên một bong bóng tin nhắn ngân hàng.</p><div class="meta"><p class="sub">Mẹ: "Chợ giờ cái gì cũng lên giá."</p><p class="app"><b>Màn app:</b> tài chính hôm nay</p></div></div>
+    <div class="shot"><div class="id">3B<small class="new">vẽ mới</small></div><p class="act">Hun ngồi trước điện thoại. Bong bóng tin nhắn trôi ra, thành một dòng trong cuốn sổ chi tiêu, kèm một đồng xu.</p><div class="meta"><p class="sub mute">(không lời)</p><p class="app"><b>Màn app:</b> dán tin ngân hàng → giao dịch</p></div></div>
+    <div class="shot"><div class="id">3C<small class="redo">vẽ lại</small></div><p class="act">Hun ôm đồng xu sát bụng, thả vào hũ tiết kiệm hoa sen. Trên tường, sợi len đánh dấu ngân sách dừng ở giữa vạch. Ô đồng xu được gạch.</p><div class="meta"><p class="sub">Mẹ: "Ủa, tháng này vẫn còn dư hả?"</p><p class="app"><b>Màn app:</b> ngân sách tháng</p><div class="ref"><img src="img/03c.webp" alt=""><span>Bản cũ để tham khảo bố cục.</span></div></div></div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="ch-head"><span class="num">04</span><span class="time">CN 19:00</span><h3>Tối Chủ nhật</h3><span class="feat">Gia đình</span></div>
+  <p class="featcopy">Cả nhà cùng xem lại tuần. Mời người thân bằng mã hoặc QR. Nhắc giỗ và sinh nhật theo âm lịch.</p>
+  <div class="shots">
+    <div class="shot"><div class="id">4A<small class="new">vẽ mới</small></div><p class="act">Bàn tròn thấp, 4 tách trà khác nhau. Tay mẹ, tay ba, tay bé quanh bàn. Hun rót trà, hơi tràn ra đĩa.</p><div class="meta"><p class="sub">Bé: "Để con rót cho!"</p><p class="app"><b>Màn app:</b> nhìn lại tuần</p></div></div>
+    <div class="shot"><div class="id">4B<small class="redo">vẽ lại</small></div><p class="act">Giữa bàn, biểu đồ 7 cột bằng khối đất sét, cột cuối thấp hơn. Ngón tay bé chỉ vào cột thấp, tay ba giơ ngón cái. Hun nhảy lên một cái.</p><div class="meta"><p class="sub">Bé: "Tại con không mua trà sữa đó."</p><p class="app"><b>Màn app:</b> biểu đồ tuần · Bốn tuần đồng lòng</p><div class="ref"><img src="img/04b.webp" alt=""><span>Bản cũ để tham khảo bố cục.</span></div></div></div>
+    <div class="shot"><div class="id">4C<small class="new">vẽ mới</small></div><p class="act">Lịch âm treo tường lật sang một ngày khoanh tròn đỏ. Ở cửa có thêm một đôi dép lạ cạnh dép cả nhà. Ô ngôi nhà được gạch.</p><div class="meta"><p class="sub">Mẹ: "Thứ Năm giỗ ông, nhớ về sớm."</p><p class="app"><b>Màn app:</b> mời người thân · giỗ, sinh nhật âm lịch</p></div></div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="ch-head"><span class="num">05</span><span class="time">22:30</span><h3>Tắt đèn</h3><span class="feat">Riêng tư</span></div>
+  <p class="featcopy">Nhật ký chỉ mình bạn đọc. AI trực tuyến tắt sẵn. Không quảng cáo, không bán dữ liệu.</p>
+  <div class="shots">
+    <div class="shot"><div class="id">5A<small class="redo">vẽ lại</small></div><p class="act">Cả nhà đã ngủ. Chỉ còn đèn ngủ. Hun ngồi viết vào một cuốn nhật ký nhỏ đặt trên đùi.</p><div class="meta"><p class="sub mute">(không lời)</p><p class="app"><b>Màn app:</b> nhật ký</p></div></div>
+    <div class="shot"><div class="id">5B<small class="new">vẽ mới</small></div><p class="act">Hun cất nhật ký vào chiếc hộp có ổ khóa hình trái tim, rồi kéo rèm cửa sổ lại.</p><div class="meta"><p class="sub mute">(không lời)</p><p class="app"><b>Màn app:</b> riêng tư · AI tắt sẵn · không quảng cáo</p></div></div>
+    <div class="shot"><div class="id">5C<small class="redo">vẽ lại</small></div><p class="act">Hun cuộn trong chiếc chăn nhỏ cạnh hũ cá đã đầy. Bảng 4 việc gạch hết. Đèn tắt dần.</p><div class="meta"><p class="sub mute">(không lời)</p><p class="app"><b>Màn app:</b> Tổ Ấm, 4/4 việc</p><div class="ref"><img src="img/05c.webp" alt=""><span>Bản cũ để tham khảo bố cục.</span></div></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Trailer 25 giây</h2>
+  <div class="trailer"><span class="tc">"Nhà nào cũng có một người lo mọi thứ mà không ai để ý."</span><i>→</i><span>1A</span><span>1C</span><span>2A</span><span>2B</span><span>3B</span><span>3C</span><span>4A</span><span>4B</span><span>5C</span><i>→</i><span class="tc">VUN VÉN · Sắp có trên iPhone</span></div>
+</section>
+
+<section>
+  <h2>Credits cuối trang</h2>
+  <p style="color:var(--body);margin:-6px 0 14px">Sau phần vé "Miễn phí trọn đời", hỏi đáp và "Sắp công chiếu" (giữ nguyên), thêm một dòng credits chạy như cuối phim:</p>
+  <div class="credits"><span><b>HUN</b> · Hun</span><span><b>MẸ</b> · tay áo xanh</span><span><b>BA</b> · tay áo kẻ</span><span><b>BÉ</b> · dép hồng</span><span><b>BÀ</b> · giọng trong điện thoại</span><span style="opacity:.7;margin-top:6px">Một phim của tdk.best · Sắp công chiếu trên iPhone</span></div>
+</section>
+
+<section class="next card">
+  <h2 style="margin:0">Sau khi bạn duyệt</h2>
+  <ol>
+    <li>Codex vẽ trước <b>bảng đạo cụ chung</b>: bảng 4 việc, hũ cá, tay của mẹ, ba, bé. Như vậy mọi shot dùng cùng một bộ.</li>
+    <li>Vẽ <b>key art poster</b> (16:9 và 4:5), rồi 15 shot. Mỗi shot là một ảnh tĩnh 2.39:1. Không làm chuỗi frame nữa.</li>
+    <li>Mình kiểm từng ảnh theo luật giải phẫu. Ảnh sai thì vẽ lại trước khi ghép vào trang.</li>
+    <li>Dựng trang theo phương án A, trailer ghép từ các shot.</li>
+  </ol>
+</section>
+</div>

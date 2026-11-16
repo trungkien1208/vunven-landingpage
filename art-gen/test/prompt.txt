@@ -1,0 +1,13 @@
+Generate ONE image with your image generation tool and save it as PNG to: art-gen/test/scene1-ven-vi.png (relative to current dir). Do not write any code or other files.
+
+Style reference: the two attached images (og.jpg and ref-morning.png). Match them exactly: handmade 3D claymation / stop-motion miniature set, visible fingerprints and tool marks in the clay, soft matte surfaces, warm cream walls, pastel sage green and terracotta accents, soft warm window light, shallow depth of field like a macro lens on a miniature set, cozy Vietnamese home details.
+
+Scene 1 "Giữ ví khỏe" (morning): a small wooden kitchen table near a window with sage-green wooden shutters, morning light. On the table: a terracotta clay piggy-bank jar, a neat stack of small clay coins, a little handwritten clay notebook with a pencil, a cup of cà phê sữa đá, a small plant. Background: soft blurred Vietnamese street with pastel houses.
+
+IMPORTANT: NO characters, NO animals, NO penguin, NO people, NO text, NO logos. Leave clear empty space on the LEFT third of the table (a mascot will be composited there later) and calm wall space top-left for a headline.
+Aspect ratio 16:9 landscape, high resolution.
+
+SECOND TASK (after the first image is saved): a short stop-motion test.
+Generate 8 frames, same claymation style, same lighting, same camera, each saved as art-gen/test/coin/frame-01.png ... frame-08.png:
+close-up of the terracotta clay piggy-bank jar on the wooden table; a single clay coin drops from above into the slot across the 8 frames (frame 1 coin high above, frame 6 coin entering slot, frames 7-8 jar slightly squashes and settles). Keep jar, table, background and framing IDENTICAL between frames - only the coin and tiny jar squash change, like real stop-motion. Square 1:1.
+Then assemble them into art-gen/test/coin/coin-drop.gif at 12 fps (83ms per frame), looping, using any tool available locally (python Pillow, ffmpeg or ImageMagick). Report which files you wrote.

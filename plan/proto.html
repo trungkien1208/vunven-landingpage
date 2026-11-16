@@ -1,0 +1,299 @@
+<title>Vun Vén Prototype</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Mali:ital,wght@0,500;0,600;1,500&family=Coiny&family=Quicksand:wght@500;600;700&family=Itim&family=Grandstander:wght@600;700;800&family=Patrick+Hand&display=swap">
+<style>
+/* Layout: split film. Left = sticky "screen" that keeps playing; right = subtitle reel that scrolls. Single warm clay look (deliberately one theme). */
+:root{
+  color-scheme:light;
+  --cream:#f6ede2; --clay:#efe2d1; --paper:#fffaf3; --ink:#3a2a22; --body:#7a665a; --line:#e6d6c3;
+  --rose:#e2577a; --rose-hi:#f49ab0; --rose-lo:#b93a5c; --sage:#8fae8b; --sage-lo:#6c8b68; --terra:#c9714a; --film:#1f1915; --mint:#e1f3ea;
+  --f-head:"Baloo 2", "Nunito", system-ui, sans-serif;
+  --f-body:"Nunito", system-ui, sans-serif;
+  --f-voice:"Mali", "Nunito", cursive;
+  --head-w:800; --head-ls:-.01em;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-font="b"]{--f-head:"Coiny", "Quicksand", system-ui, sans-serif;--f-body:"Quicksand", system-ui, sans-serif;--f-voice:"Itim", "Quicksand", cursive;--head-w:400;--head-ls:0}
+:root[data-font="c"]{--f-head:"Grandstander", "Nunito", system-ui, sans-serif;--f-body:"Nunito", system-ui, sans-serif;--f-voice:"Patrick Hand", "Nunito", cursive;--head-w:800;--head-ls:-.01em}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font:500 16px/1.65 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::after{content:"";position:fixed;inset:0;background:var(--grain);opacity:.12;mix-blend-mode:multiply;pointer-events:none;z-index:50}
+h1,h2,h3{font-family:var(--f-head);font-weight:var(--head-w);letter-spacing:var(--head-ls);margin:0;text-wrap:balance;line-height:1.08}
+p{margin:0}
+img{max-width:100%}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--cream) 88%,transparent);backdrop-filter:blur(8px);
+  margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--cream)}
+.top-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:8px;font:var(--head-w) 21px/1 var(--f-head);color:var(--ink);text-decoration:none;flex:none}
+.brand img{width:34px;height:34px;border-radius:10px}
+.reel{display:flex;gap:3px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;padding:2px}
+.reel a{flex:1 0 auto;text-decoration:none;font:700 12.5px/1 var(--f-body);color:var(--body);padding:8px 10px;border-radius:10px;white-space:nowrap;transition:background .12s steps(2)}
+.reel a:hover{background:var(--clay)}
+.reel a.on{background:var(--ink);color:var(--cream)}
+.top .btn{flex:none;padding:10px 16px;font-size:14px}
+
+/* ---------- switchers (prototype only) ---------- */
+.lab{max-width:1240px;margin:14px auto 0;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font:700 12px var(--f-body);color:var(--body);
+  background:var(--paper);border:1.5px dashed var(--line);border-radius:14px;padding:10px 14px}
+.lab .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.lab button{font:700 12.5px var(--f-body);border:1.5px solid var(--line);background:var(--cream);color:var(--ink);border-radius:9px;padding:6px 10px;cursor:pointer}
+.lab button[aria-pressed="true"]{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.lab button:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+
+/* ---------- buttons: 3 candidate styles ---------- */
+.btn{--bg:var(--rose);--hi:var(--rose-hi);--lo:var(--rose-lo);--fg:#fff;display:inline-flex;align-items:center;gap:8px;font:var(--head-w) 17px/1 var(--f-head);letter-spacing:var(--head-ls);
+  text-decoration:none;cursor:pointer;border:0;color:var(--fg);padding:15px 24px;transition:transform .1s steps(2)}
+.btn.soft{--bg:var(--paper);--hi:#fff;--lo:#dccab4;--fg:var(--ink)}
+.btn svg{width:18px;height:18px;flex:none}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+/* A: kẹo dẻo */
+:root:not([data-btn]) .btn,:root[data-btn="a"] .btn{border-radius:999px;background:radial-gradient(120% 90% at 30% 15%,var(--hi) 0%,var(--bg) 45%);
+  box-shadow:inset 0 -4px 0 #00000014,inset 0 2px 0 #ffffff70,0 5px 0 var(--lo),0 12px 20px -6px color-mix(in srgb,var(--lo) 60%,transparent)}
+:root:not([data-btn]) .btn::before,:root[data-btn="a"] .btn::before{content:"";position:absolute}
+:root:not([data-btn]) .btn:hover,:root[data-btn="a"] .btn:hover{transform:translateY(-2px) rotate(-1deg)}
+:root:not([data-btn]) .btn:active,:root[data-btn="a"] .btn:active{transform:translateY(4px) scale(1.03,.94);box-shadow:inset 0 -2px 0 #00000014,inset 0 2px 0 #ffffff70,0 1px 0 var(--lo),0 4px 8px -4px var(--lo)}
+/* B: viên đất nặn — matte, offset hard shadow, wobbly radius */
+:root[data-btn="b"] .btn{background:var(--bg);border-radius:22px 26px 20px 28px / 26px 20px 28px 22px;border:2.5px solid var(--ink);box-shadow:4px 5px 0 var(--ink)}
+:root[data-btn="b"] .btn.soft{border-color:var(--ink)}
+:root[data-btn="b"] .btn:hover{transform:translate(-1px,-1px) rotate(-1.2deg)}
+:root[data-btn="b"] .btn:active{transform:translate(3px,4px);box-shadow:1px 1px 0 var(--ink)}
+/* C: nhãn dán — sticker with white rim, tilted */
+:root[data-btn="c"] .btn{background:var(--bg);border-radius:16px;outline:4px solid #fff;outline-offset:0;box-shadow:0 0 0 4px #fff,0 8px 16px -4px #3a2a2240;transform:rotate(-2deg)}
+:root[data-btn="c"] .btn.soft{background:var(--mint);--fg:#2f5a3f;transform:rotate(1.5deg)}
+:root[data-btn="c"] .btn:hover{transform:rotate(0deg) scale(1.04)}
+:root[data-btn="c"] .btn:active{transform:rotate(0deg) scale(.97)}
+:root[data-btn="c"] .btn:focus-visible{outline:4px solid #fff;box-shadow:0 0 0 4px #fff,0 0 0 7px var(--ink)}
+
+/* ---------- film split ---------- */
+.film{max-width:1240px;margin:28px auto 0;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
+.screen-col{position:sticky;top:calc(env(safe-area-inset-top,0px) + 86px)}
+.screen{position:relative;aspect-ratio:4/3.4;border-radius:28px 30px 26px 32px;overflow:hidden;background:var(--film);
+  box-shadow:0 0 0 10px var(--clay),0 0 0 12px var(--line),0 24px 40px -12px #3a2a2255;max-width:100%}
+.screen .plate{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;animation:drift 14s steps(168) infinite alternate}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(-2.5%,-1.5%) scale(1.04)}}
+.screen .hun{position:absolute;left:6%;bottom:5%;width:30%;max-width:190px;animation:boil .5s steps(1) infinite;filter:drop-shadow(0 10px 6px #0000002e)}
+@keyframes boil{0%{transform:rotate(-1deg)}25%{transform:rotate(.6deg) translateY(-1px)}50%{transform:rotate(-.4deg) translateX(1px)}75%{transform:rotate(.8deg)}}
+.screen::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,#0000004d 100%);z-index:2;pointer-events:none}
+.screen::after{content:"";position:absolute;inset:-50%;background:var(--grain);opacity:.22;z-index:3;pointer-events:none;animation:grain .5s steps(1) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-5%,3%)}50%{transform:translate(4%,-3%)}75%{transform:translate(-2%,-5%)}}
+.screen .flash{position:absolute;inset:0;background:#fff8ec;opacity:0;z-index:4;pointer-events:none}
+.screen.cut .flash{animation:cut .25s steps(3) 1}
+@keyframes cut{0%{opacity:.75}33%{opacity:.35}66%,100%{opacity:0}}
+.tc{position:absolute;top:14px;left:16px;z-index:5;font:700 12px/1 ui-monospace,Menlo,monospace;color:#fff;background:#1f1915aa;padding:5px 8px;border-radius:7px;letter-spacing:.06em}
+.rec{position:absolute;top:14px;right:16px;z-index:5;display:flex;align-items:center;gap:6px;font:700 12px/1 var(--f-body);color:#fff;background:#1f1915aa;padding:5px 9px;border-radius:7px}
+.rec i{width:8px;height:8px;border-radius:50%;background:#ff6b81;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.2}}
+.screen-note{margin-top:22px;font:600 12.5px var(--f-body);color:var(--body);text-align:center}
+
+/* subtitle reel */
+.subs{display:grid;gap:0}
+.sub{min-height:86vh;display:grid;align-content:center;gap:16px;padding-block:6vh;scroll-margin-top:90px}
+.sub:first-child{min-height:72vh;align-content:start;padding-top:4vh}
+.sub .when{display:inline-flex;align-items:center;gap:8px;justify-self:start;font:800 13px/1 var(--f-body);color:var(--terra);background:#f6dccd;padding:7px 12px;border-radius:999px}
+.sub h1{font-size:clamp(42px,6.4vw,76px)}
+.sub h2{font-size:clamp(32px,4.2vw,50px)}
+.sub h1 em,.sub h2 em{font-style:normal;color:var(--rose)}
+.voice{font:500 clamp(19px,2vw,23px)/1.45 var(--f-voice);color:var(--ink);position:relative;padding-left:46px}
+.voice::before{content:"";position:absolute;left:0;top:2px;width:34px;height:34px;border-radius:50%;background:url(img/hun-face.webp) center/cover,var(--clay);box-shadow:0 0 0 3px var(--paper)}
+.sub .desc{color:var(--body);max-width:44ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:700 13.5px var(--f-body);padding:7px 13px;border-radius:14px 16px 13px 15px;background:var(--mint);color:#2f5a3f}
+.chip.t{background:#f6dccd;color:#8a4426}.chip.p{background:#fde7ea;color:#9c2c49}.chip.v{background:#ece6f7;color:#5a4691}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.phone-mini{width:84px;aspect-ratio:9/19;border-radius:20px;background:linear-gradient(160deg,#b9cfb5,var(--sage));padding:5px;box-shadow:inset 0 3px 4px #ffffff80,inset 0 -6px 8px #3c573a55,0 10px 16px #3a2a2233;flex:none;transform:rotate(-4deg)}
+.phone-mini span{display:grid;place-items:center;height:100%;border-radius:15px;background:repeating-linear-gradient(135deg,#fffaf3 0 7px,#f4e9db 7px 14px);font:700 9px/1.3 var(--f-body);color:var(--body);text-align:center;padding:4px}
+
+/* after film */
+.after{max-width:1240px;margin:8vh auto 0;display:grid;gap:clamp(72px,10vw,120px);padding-bottom:96px}
+.after h2{font-size:clamp(32px,4.4vw,52px);margin-bottom:10px}
+.after .lead{color:var(--body);max-width:52ch}
+.tickets{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:28px;max-width:760px}
+.ticket{display:grid;grid-template-columns:1fr auto;background:var(--paper);border-radius:18px;position:relative;box-shadow:0 0 0 1.5px var(--line),0 10px 20px -8px #3a2a2233;min-width:0}
+.ticket.hot{background:var(--rose);color:#fff;box-shadow:0 10px 20px -8px #b93a5c88}
+.ticket .m{padding:20px 22px;display:grid;gap:4px;border-right:2.5px dashed #3a2a2230}
+.ticket.hot .m{border-right-color:#ffffff70}
+.ticket .s{padding:16px 12px;writing-mode:vertical-rl;transform:rotate(180deg);font:800 11px var(--f-body);letter-spacing:.18em;text-align:center}
+.ticket::before,.ticket::after{content:"";position:absolute;right:31px;width:20px;height:20px;border-radius:50%;background:var(--cream)}
+.ticket::before{top:-10px}.ticket::after{bottom:-10px}
+.ticket .k{font:800 11.5px var(--f-body);letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.ticket .p{font:var(--head-w) 34px/1.05 var(--f-head)}
+.ticket .p small{font:600 14px var(--f-body);opacity:.8}
+.faq{display:grid;gap:10px;margin-top:24px;max-width:780px}
+.faq details{background:var(--paper);border-radius:18px;padding:16px 20px;box-shadow:0 0 0 1.5px var(--line)}
+.faq summary{cursor:pointer;font:var(--head-w) 19px/1.3 var(--f-head);list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::after{content:"+";font-size:24px;line-height:1;color:var(--rose)}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin-top:10px;color:var(--body)}
+.end{text-align:center;display:grid;justify-items:center;gap:16px;background:var(--clay);border-radius:36px 40px 34px 42px;padding:56px 20px}
+.end h2{font-size:clamp(34px,5vw,58px)}
+.foot{max-width:1240px;margin:0 auto;padding-block:28px 40px;display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between;color:var(--body);font-size:13.5px;border-top:1px solid var(--line)}
+.foot a{color:inherit}
+
+/* mobile: film sticks on top, subtitles roll underneath */
+@media (max-width:860px){
+  .top .btn{display:none}
+  .film{grid-template-columns:1fr;gap:0}
+  .screen-col{top:calc(env(safe-area-inset-top,0px) + 60px);z-index:20;background:var(--cream);padding-block:10px 14px;margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px))}
+  .screen{aspect-ratio:16/10;border-radius:20px;box-shadow:0 0 0 6px var(--clay),0 14px 24px -12px #3a2a2255}
+  .screen .hun{width:24%}
+  .screen-note{display:none}
+  .sub{min-height:64vh}
+  .sub:first-child{min-height:56vh}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .screen .plate,.screen .hun,.screen::after,.rec i{animation:none}
+  .screen.cut .flash{animation:none}
+}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#c0"><img src="img/app-icon.png" alt="">Vun Vén</a>
+    <nav class="reel" aria-label="Các cảnh">
+      <a href="#c0" data-i="0" class="on">Mở màn</a><a href="#c1" data-i="1">Sáng</a><a href="#c2" data-i="2">Trưa</a><a href="#c3" data-i="3">Tối</a><a href="#c4" data-i="4">Chủ nhật</a><a href="#c5" data-i="5">Đêm</a><a href="#ve">Hun Plus</a><a href="#hoi">Hỏi đáp</a>
+    </nav>
+    <a class="btn" href="#cuoi">Nhận tin ra mắt</a>
+  </div>
+</header>
+
+<div class="lab" role="group" aria-label="Thử phương án">
+  <span>Bản prototype · thử:</span>
+  <span class="grp">Font
+    <button type="button" id="fa" data-font="a" aria-pressed="true">A · Baloo 2 + Mali</button>
+    <button type="button" id="fb" data-font="b" aria-pressed="false">B · Coiny + Itim</button>
+    <button type="button" id="fc" data-font="c" aria-pressed="false">C · Grandstander + Patrick Hand</button></span>
+  <span class="grp">Nút
+    <button type="button" id="ba" data-btn="a" aria-pressed="true">A · Kẹo dẻo</button>
+    <button type="button" id="bb" data-btn="b" aria-pressed="false">B · Đất nặn viền</button>
+    <button type="button" id="bc" data-btn="c" aria-pressed="false">C · Nhãn dán</button></span>
+</div>
+
+<main class="film">
+  <div class="screen-col">
+    <div class="screen" id="screen" aria-label="Màn phim">
+      <img class="plate" id="plate" src="img/s0.jpg" alt="">
+      <img class="hun" src="img/hun.webp" alt="Hun">
+      <span class="tc" id="tc">CẢNH 00 · 00:00:00</span>
+      <span class="rec"><i></i>đang chiếu</span>
+      <span class="flash"></span>
+    </div>
+    <p class="screen-note">Ảnh trong khung đang dùng tạm. Hun đất sét sẽ thay khi model sheet được duyệt.</p>
+  </div>
+
+  <div class="subs">
+    <section class="sub" id="c0" data-i="0">
+      <span class="when">Vun Vén · sắp có trên iPhone</span>
+      <h1>Khéo vén,<br>giỏi <em>vun.</em></h1>
+      <p class="voice">Hun đây, mừng bạn ghé chơi nhà mình nha.</p>
+      <p class="desc">Từ chuyện chi tiêu đến sức khỏe, nhà mình cùng chăm chút mỗi ngày. Có Hun bên cạnh, mình vun vén từng chút.</p>
+      <div class="row"><a class="btn" href="#cuoi"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 5 6.4 5c2 0 3.6 1.1 4.6 2.6C12 6.1 13.6 5 15.6 5 19 5 21.1 8.3 19.6 11.8 17.5 16.4 12 21 12 21z"/></svg>Nhận tin ra mắt</a><a class="btn soft" href="#c1">Xem phim</a></div>
+    </section>
+
+    <section class="sub" id="c1" data-i="1">
+      <span class="when">Cảnh 1 · Buổi sáng</span>
+      <h2>Giữ lòng <em>nhẹ</em></h2>
+      <p class="voice">Sáng nay, lòng mình thấy sao?</p>
+      <p class="desc">Dành một phút nghe lòng mình. Chọn một trong bảy mức cảm xúc, gọi tên nó, kể thêm nếu muốn. Mặc định chỉ mình bạn xem.</p>
+      <div class="chips"><span class="chip v">Bảy mức cảm xúc</span><span class="chip v">Gọi tên cảm xúc</span><span class="chip">Chỉ mình bạn xem</span></div>
+    </section>
+
+    <section class="sub" id="c2" data-i="2">
+      <span class="when">Cảnh 2 · Buổi trưa</span>
+      <h2>Giữ người <em>khỏe</em></h2>
+      <p class="voice">Trưa rồi, mình ghi lại số đo nha.</p>
+      <p class="desc">Ở xa vẫn chăm được ba mẹ. Ba mẹ không cần cài app. Bạn ghi giúp số đo, Hun nhắc chuyện thuốc men.</p>
+      <div class="chips"><span class="chip">Nhắc uống thuốc</span><span class="chip">Đường huyết, HbA1c</span><span class="chip">Huyết áp, cân nặng</span><span class="chip">PDF gửi bác sĩ</span></div>
+    </section>
+
+    <section class="sub" id="c3" data-i="3">
+      <span class="when">Cảnh 3 · Buổi tối</span>
+      <h2>Giữ ví <em>khỏe</em></h2>
+      <p class="voice">Hôm nay nhà mình đã chi những gì?</p>
+      <div class="row"><div class="phone-mini"><span>ảnh màn hình<br>thu chi</span></div><p class="desc" style="flex:1;min-width:200px">Dán tin nhắn ngân hàng để ghi nhanh hơn, rồi kiểm tra lại trước khi lưu. Không liên kết tài khoản, không hỏi mật khẩu hay OTP.</p></div>
+      <div class="chips"><span class="chip t">Ghi thu chi</span><span class="chip t">Ngân sách theo nhịp</span><span class="chip t">Dán tin ngân hàng</span></div>
+    </section>
+
+    <section class="sub" id="c4" data-i="4">
+      <span class="when">Cảnh 4 · Chủ nhật</span>
+      <h2>Ngồi lại <em>cùng nhau</em></h2>
+      <p class="voice">Mình ngồi lại, xem tuần qua ra sao.</p>
+      <p class="desc">Có nhau rồi, chuyện nhà mình cùng lo. Bạn tạo tổ ấm, mời người thương cùng vào, cùng nhìn lại tuần và chọn một điều cho tuần tới.</p>
+      <div class="chips"><span class="chip p">Mã mời hoặc QR</span><span class="chip p">Hồ sơ cho con, ba mẹ</span><span class="chip p">Giỗ, sinh nhật theo âm lịch</span></div>
+    </section>
+
+    <section class="sub" id="c5" data-i="5">
+      <span class="when">Cảnh 5 · Ban đêm</span>
+      <h2>Giữ chuyện <em>nhà mình</em></h2>
+      <p class="voice">Chuyện riêng của bạn, Hun giữ cẩn thận.</p>
+      <p class="desc">Nhật ký và cảm xúc mặc định chỉ mình bạn xem. AI trực tuyến mặc định tắt, chỉ bật khi bạn đồng ý. Không quảng cáo, dữ liệu không bán cho ai.</p>
+      <div class="chips"><span class="chip">Góc riêng của bạn</span><span class="chip">AI mặc định tắt</span><span class="chip">Không quảng cáo</span></div>
+    </section>
+  </div>
+</main>
+
+<div class="after">
+  <section id="ve">
+    <h2>Chọn vé cùng Hun</h2>
+    <p class="lead">Một gói, cả nhà cùng dùng. Chưa mở bán nên mọi tính năng vẫn miễn phí.</p>
+    <div class="tickets">
+      <div class="ticket"><div class="m"><span class="k">Gói tháng</span><span class="p">49.000đ <small>/tháng</small></span><span style="color:var(--body);font-size:14px">Huỷ lúc nào cũng được</span></div><div class="s">HUN PLUS</div></div>
+      <div class="ticket hot"><div class="m"><span class="k">Gói năm · 14 ngày thử</span><span class="p">399.000đ <small>/năm</small></span><span style="font-size:14px;opacity:.9">≈ 33.000đ/tháng</span></div><div class="s">HUN PLUS</div></div>
+    </div>
+  </section>
+
+  <section id="hoi">
+    <h2>Mình hỏi một chút</h2>
+    <div class="faq">
+      <details open><summary>Mỗi ngày mình cần ghi những gì?</summary><p>Bạn cứ bắt đầu từ điều đang muốn theo dõi, như một khoản chi, cảm xúc hôm nay hay số đo sức khỏe. Không cần ghi đủ mọi mục mỗi ngày.</p></details>
+      <details><summary>Mình có cần liên kết ngân hàng không?</summary><p>Không cần đâu. Bạn nhập tay hoặc dán nội dung tin ngân hàng để điền nhanh. Vun Vén không kết nối tài khoản ngân hàng và không yêu cầu mật khẩu hay mã OTP.</p></details>
+      <details><summary>Mình ghi giúp ba mẹ ở xa được không?</summary><p>Được chứ. Bạn tạo hồ sơ cho ba mẹ để ghi chỉ số, quản lý thuốc và lịch khám, ba mẹ không cần cài app.</p></details>
+    </div>
+  </section>
+
+  <section class="end" id="cuoi">
+    <h2>Sắp có trên iPhone</h2>
+    <p class="voice" style="padding-left:46px">Mai mình lại chăm chút cho nhà mình.</p>
+    <a class="btn" href="#cuoi">Nhận tin ra mắt</a>
+    <p style="color:var(--body);font-size:14px">Hoặc nhắn tụi mình: <span style="user-select:all;font-weight:700">support@tdk.best</span></p>
+  </section>
+</div>
+
+<footer class="foot"><span>© Vun Vén · tdk.best</span><span><a href="https://tdk.best/product/vunven/privacy">Quyền riêng tư</a> · <a href="https://tdk.best/product/vunven/termandcondition">Điều khoản</a></span></footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  root.setAttribute('data-font','b');root.setAttribute('data-btn','b');
+  [['fa','false'],['fb','true'],['fc','false'],['ba','false'],['bb','true'],['bc','false']].forEach(function(p){document.getElementById(p[0]).setAttribute('aria-pressed',p[1])});
+  function wire(attr,ids){ids.forEach(function(id){var b=document.getElementById(id);b.addEventListener('click',function(){
+    root.setAttribute('data-'+attr,b.dataset[attr]);ids.forEach(function(o){document.getElementById(o).setAttribute('aria-pressed',o===id?'true':'false')});});});}
+  wire('font',['fa','fb','fc']);wire('btn',['ba','bb','bc']);
+
+  var plates=['img/s0.jpg','img/s1.webp','img/s2.webp','img/s3-cine.webp','img/s4.webp','img/s5.webp'];
+  var hunEl=document.querySelector('.screen .hun');
+  plates.forEach(function(s){var i=new Image();i.src=s;});
+  var screen=document.getElementById('screen'),plate=document.getElementById('plate'),tc=document.getElementById('tc');
+  var links=[].slice.call(document.querySelectorAll('.reel a[data-i]'));
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur=0,t0=performance.now();
+  function show(i){
+    if(i===cur)return;cur=i;t0=performance.now();
+    links.forEach(function(a){a.classList.toggle('on',+a.dataset.i===i)});
+    if(reduce){plate.src=plates[i];hunEl.hidden=(i===3);return;}
+    screen.classList.remove('cut');void screen.offsetWidth;screen.classList.add('cut');
+    setTimeout(function(){plate.src=plates[i];hunEl.hidden=(i===3);},83);
+  }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)show(+e.target.dataset.i);});},{rootMargin:'-45% 0px -45% 0px'});
+  document.querySelectorAll('.sub').forEach(function(s){io.observe(s)});
+  function pad(n){return(n<10?'0':'')+n}
+  setInterval(function(){var s=Math.floor((performance.now()-t0)/1000),f=Math.floor(((performance.now()-t0)%1000)/83.3);
+    tc.textContent='CẢNH '+pad(cur)+' · 00:'+pad(Math.floor(s/60)%60)+':'+pad(s%60)+':'+pad(f);},83);
+})();
+</script>

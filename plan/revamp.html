@@ -1,0 +1,466 @@
+<title>Vun Vén Revamp</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Quicksand:wght@500;600;700&family=Itim&display=swap">
+<style>
+/* Layout: one film that never stops. Scenes 00–05: fixed screen on the left, subtitles on the right.
+   Credits 06–08: the screen opens to full-bleed and the pricing / FAQ / ending roll over it like end credits.
+   Single warm clay look, set explicitly. */
+:root{
+  color-scheme:light;
+  --cream:#f6ede2; --clay:#efe2d1; --paper:#fffaf3; --ink:#3a2a22; --body:#7a665a; --line:#e6d6c3;
+  --rose:#e2577a; --rose-lo:#b93a5c; --sage:#8fae8b; --mint:#e1f3ea; --film:#1f1915;
+  --f-head:"Baloo 2","Quicksand",system-ui,sans-serif; --f-body:"Quicksand",system-ui,sans-serif; --f-voice:"Itim","Quicksand",cursive;
+  --gl:max(16px,env(safe-area-inset-left,0px)); --gr:max(16px,env(safe-area-inset-right,0px));
+  --edge:16px; --head-top:calc(env(safe-area-inset-top,0px) + 36px); --head-h:52px;
+  --screen-top:calc(var(--head-top) + var(--head-h) + 26px); --screen-w:56vw;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font:500 16.5px/1.65 var(--f-body);padding-left:var(--gl);padding-right:var(--gr);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-head);font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance;line-height:1.1}
+p{margin:0} img{max-width:100%;display:block}
+html{scrollbar-color:var(--rose) var(--clay)}
+@supports selector(::-webkit-scrollbar){html{scrollbar-color:auto}}
+::-webkit-scrollbar{width:14px}::-webkit-scrollbar-track{background:var(--clay)}
+::-webkit-scrollbar-thumb{background:var(--rose);border:2.5px solid var(--ink);border-radius:10px 12px 9px 13px}
+
+/* ---------- header: the director's clapperboard as a compact floating pill; the striped arm snaps on every cut ---------- */
+.head{position:fixed;z-index:50;top:var(--head-top);left:0;right:0;margin:0 auto;width:max-content;height:var(--head-h);max-width:calc(100% - 24px);
+  display:flex;align-items:center;gap:12px;padding:0 6px 0 12px;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;box-shadow:3px 4px 0 var(--ink)}
+.tab{position:absolute;left:50%;top:-21px;transform:translateX(-50%);height:21px;padding:0 12px;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  background:var(--paper);border:2.5px solid var(--ink);border-bottom:0;border-radius:9px 9px 0 0;font:700 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:var(--body);text-transform:uppercase}
+.tab b{color:var(--ink);font:800 12.5px/1 var(--f-head);letter-spacing:0;text-transform:none}
+.tab .live{width:7px;height:7px;border-radius:50%;background:#e2577a;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.25}}
+.clap{position:fixed;z-index:6;left:calc(var(--gl) + 30px);top:calc(var(--screen-top) - 13px);width:132px;height:17px;border:2.5px solid var(--ink);border-radius:6px 8px 2px 2px;
+  background:repeating-linear-gradient(-55deg,var(--ink) 0 12px,var(--paper) 12px 24px);transform-origin:0 100%;transform:rotate(-8deg);transition:transform .18s steps(3),opacity .3s steps(3)}
+.clap::after{content:"";position:absolute;left:-6px;bottom:-6px;width:10px;height:10px;border-radius:50%;background:var(--rose);border:2px solid var(--ink)}
+.clap.snap{transform:rotate(0deg)}
+body.credits .clap{opacity:0}
+.brand{display:flex;align-items:center;gap:7px;font:800 18px/1 var(--f-head);text-decoration:none;color:var(--ink);flex:none}
+.brand img{width:30px;height:30px;border-radius:9px}
+.cells{display:flex;align-items:center;gap:2px;min-width:0;overflow-x:auto;scrollbar-width:none}
+.cells::-webkit-scrollbar{display:none}
+.cells a{flex:none;font:700 14px/1 var(--f-body);color:var(--body);text-decoration:none;padding:9px 11px;border-radius:999px;white-space:nowrap;transition:background .1s steps(2),color .1s steps(2)}
+.cells a:hover{background:var(--cream);color:var(--ink)}
+.cells a.on{background:var(--rose);color:#fff}
+.cells a.cc.on{background:var(--sage);color:#1f3a2e}
+.cells .div{flex:none;width:0;height:20px;border-left:2px dashed var(--line);margin:0 6px}
+.cells a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:800 17px/1 var(--f-head);text-decoration:none;cursor:pointer;color:#fff;background:var(--rose);padding:15px 24px;
+  border:2.5px solid var(--ink);border-radius:22px 26px 20px 28px/26px 20px 28px 22px;box-shadow:4px 5px 0 var(--ink);transition:transform .1s steps(2)}
+.btn.soft{background:var(--paper);color:var(--ink)}
+.btn:hover{transform:translate(-1px,-1px) rotate(-1.2deg)}
+.btn:active{transform:translate(3px,4px);box-shadow:1px 1px 0 var(--ink)}
+.btn:focus-visible{outline:3px solid var(--rose);outline-offset:5px}
+.btn svg{width:18px;height:18px}
+.head .btn{font-size:14px;padding:9px 14px;flex:none;border-radius:999px;box-shadow:none;border-width:2px}
+.head .btn:active{transform:translateY(1px)}
+
+/* ---------- the screen: fixed, never leaves ---------- */
+.screen{position:fixed;z-index:1;overflow:hidden;background:var(--film);
+  top:var(--screen-top);bottom:16px;left:var(--gl);width:var(--screen-w);
+  border-radius:28px 30px 26px 32px;box-shadow:0 0 0 8px var(--clay),0 0 0 10.5px var(--line),0 26px 44px -14px #3a2a2266;
+  transition:top .5s steps(6),bottom .5s steps(6),left .5s steps(6),width .5s steps(6),border-radius .5s steps(6),box-shadow .5s steps(6)}
+.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:drift 14s steps(168) infinite alternate}
+@keyframes drift{from{transform:scale(1)}to{transform:scale(1.06) translate(-1.5%,-1%)}}
+.screen::before{content:"";position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse at center,transparent 55%,#0000004d 100%);pointer-events:none;transition:background .5s steps(6)}
+.screen::after{content:"";position:absolute;inset:-50%;z-index:3;background:var(--grain);opacity:.2;pointer-events:none;animation:grain .5s steps(1) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-5%,3%)}50%{transform:translate(4%,-3%)}75%{transform:translate(-2%,-5%)}}
+.flash{position:absolute;inset:0;z-index:4;background:#fff8ec;opacity:0;pointer-events:none}
+.tc{position:absolute;z-index:5;left:16px;bottom:14px;font:700 12px/1 ui-monospace,Menlo,monospace;color:#fff;background:#1f1915aa;padding:6px 8px;border-radius:7px;font-variant-numeric:tabular-nums}
+/* credits: the screen opens to full-bleed behind the content */
+body.credits .screen{top:0;bottom:0;left:0;width:100%;border-radius:0;box-shadow:none}
+body.credits .screen::before{background:linear-gradient(180deg,#1f191566 0%,#1f191526 40%,#1f191580 100%)}
+body.credits .tc{left:var(--gl);bottom:18px}
+
+/* ---------- subtitles: each scene keeps its title pinned while three beats (shots) pass ---------- */
+.subs{position:relative;z-index:2;margin-left:calc(var(--screen-w) + 8px);padding:0 clamp(20px,4vw,72px)}
+.scene{position:relative;max-width:640px}
+.stage{position:sticky;top:var(--screen-top);height:calc(100svh - var(--screen-top) - 16px);display:grid;align-content:center;gap:26px;padding-bottom:8px}
+.beats{display:grid}
+.beats>.beat{grid-area:1/1;align-content:start}
+.beats>.beat:not(.on){visibility:hidden}
+.marks{margin-top:calc(-1 * (100svh - var(--screen-top) - 16px))}
+.mark{height:62svh}
+.marks{padding-bottom:34svh}
+.mark:first-child{height:calc(100svh - var(--screen-top))}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:700 13px var(--f-body);padding:6px 12px;border-radius:14px 16px 13px 15px;background:var(--mint);color:#2f5a3f}
+.chip.t{background:#f6dccd;color:#8a4426}.chip.p{background:#fde7ea;color:#9c2c49}.chip.v{background:#ece6f7;color:#5a4691}
+.scene-head{display:grid;gap:10px}
+.scene-head.hero{gap:16px}
+.when{justify-self:start;display:inline-flex;align-items:center;gap:8px;font:800 15px/1 var(--f-head);color:#8a4426;background:#f6dccd;padding:5px 14px 5px 6px;border-radius:999px}
+.when img{width:30px;height:30px}
+.scene-head.hero .when{font:700 13px/1 var(--f-body);padding:8px 13px}
+.scene-head h1{font-size:clamp(48px,5.6vw,96px)}
+.scene-head h2{font-size:clamp(34px,3.4vw,56px)}
+em{font-style:normal;color:var(--rose)}
+.scene-head .desc{font-size:15px}
+.beat{display:grid;gap:16px}
+.voice{font:400 clamp(21px,2.1vw,26px)/1.4 var(--f-voice);position:relative;padding-left:50px}
+.voice::before{content:"";position:absolute;left:0;top:-2px;width:38px;height:38px;border-radius:50%;background:url(img/face.webp) center/cover,var(--clay);box-shadow:0 0 0 3px var(--paper)}
+.desc{color:var(--body);max-width:46ch}
+.row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+/* beats fade in on stop-motion steps when they become the current shot */
+.beat .voice,.beat .app,.beat .desc,.beat .row{opacity:.28;transform:translateY(10px);transition:opacity .3s steps(3),transform .3s steps(3)}
+.beat.on .voice,.beat.on .app,.beat.on .desc,.beat.on .row{opacity:1;transform:none}
+
+/* ---------- app cards: what the app actually does in that shot ---------- */
+.app{width:min(540px,100%);font-size:17px;background:#fff;border:2.5px solid var(--ink);border-radius:26px 28px 24px 30px;box-shadow:5px 6px 0 var(--ink);padding:14px 16px 16px;display:grid;gap:12px}
+.app.dark{background:#2a2230;color:#f6ede2;border-color:var(--ink)}
+.app-bar{display:flex;align-items:center;gap:8px;font:700 12px var(--f-body);color:var(--body)}
+.app.dark .app-bar{color:#c9bcd2}
+.app-bar img{width:20px;height:20px;border-radius:6px}
+.app-bar time{margin-left:auto;font-variant-numeric:tabular-nums}
+.q{font:800 23px/1.2 var(--f-head)}
+.q.night{font-size:22px}
+.faces{display:flex;justify-content:space-between;gap:2px}
+.faces img{width:13%;aspect-ratio:1;border-radius:50%;background:var(--cream);transition:transform .3s steps(3),filter .3s steps(3)}
+.faces.dim img{filter:grayscale(.7) opacity(.65)}
+.faces.pick img{filter:grayscale(.6) opacity(.55)}
+.beat.on .faces.pick img.f6{filter:none;transform:scale(1.28) translateY(-3px);box-shadow:0 0 0 2.5px var(--rose)}
+.slider{height:12px;border-radius:99px;background:linear-gradient(90deg,#9db4d6,#e9d9a8,#f2a2b5);position:relative;border:2px solid var(--ink)}
+.slider i{position:absolute;top:50%;left:0;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#fff;border:2.5px solid var(--ink);transition:left .6s steps(6)}
+.beat.on .slider i{left:var(--v)}
+.state{font:800 22px/1.2 var(--f-head);color:var(--rose-lo)}
+.state.small{font:700 13.5px/1.3 var(--f-body);color:var(--body)}
+.pill-btn{justify-self:start;font:700 14px/1 var(--f-body);background:var(--rose);color:#fff;padding:10px 14px;border-radius:12px;border:2px solid var(--ink)}
+.pill-btn.ok{background:#e3f5e6;color:#2f6b45}
+.pill-btn.ghost{background:var(--paper);color:var(--ink)}
+.row2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row2.between{justify-content:space-between}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font:700 13px var(--f-body);padding:6px 11px;border-radius:12px;background:var(--cream);color:var(--body);border:1.5px solid var(--line)}
+.tags span.on{background:#ece6f7;color:#5a4691;border-color:#5a4691}
+.lock{font:600 13px/1.4 var(--f-body);color:var(--body);display:flex;gap:6px;align-items:center}
+.lock::before{content:"";width:14px;height:14px;flex:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237a665a'%3E%3Cpath d='M7 10V7a5 5 0 0110 0v3h1a1 1 0 011 1v9a1 1 0 01-1 1H6a1 1 0 01-1-1v-9a1 1 0 011-1h1zm2 0h6V7a3 3 0 00-6 0v3z'/%3E%3C/svg%3E") center/contain no-repeat}
+.notif{background:var(--cream);border-radius:16px;padding:12px 14px;display:grid;gap:2px;border:1.5px solid var(--line)}
+.notif b{font:800 17px/1.2 var(--f-head)}
+.notif span{font-size:14px;color:var(--body)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.week span{aspect-ratio:1;display:grid;place-items:center;border-radius:10px;font:700 12px var(--f-body);background:var(--cream);border:1.5px solid var(--line);color:var(--body)}
+.week span.done{background:#e3f5e6;color:#2f6b45;border-color:#9fcfaf}
+.week span.now{background:var(--rose);color:#fff;border-color:var(--ink)}
+.big{font:800 56px/1 var(--f-head);font-variant-numeric:tabular-nums}
+.big span{font-size:.6em;color:var(--body)}
+.big small{font:700 14px var(--f-body);color:var(--body)}
+.badge{justify-self:start;font:700 12.5px/1 var(--f-body);background:#e3f5e6;color:#2f6b45;padding:7px 10px;border-radius:99px}
+.sms{font:600 12.5px/1.45 ui-monospace,Menlo,monospace;background:#eef0f3;color:#3b4250;padding:10px 12px;border-radius:14px 14px 14px 4px}
+.arrow{text-align:center;color:var(--rose);font:800 18px/1 var(--f-head)}
+.txn{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:var(--cream);border-radius:14px;padding:10px 12px}
+.txn .ic{width:34px;height:34px}
+.txn b{font-weight:700}.txn small{display:block;color:var(--body);font-size:12.5px}
+.txn .amt{color:var(--rose-lo);font:800 17px var(--f-head);font-variant-numeric:tabular-nums}
+.bar{height:16px;border-radius:99px;background:var(--cream);border:2px solid var(--ink);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--sage);transition:width .6s steps(6)}
+.beat.on .bar i{width:var(--v)}
+.chart{display:flex;align-items:flex-end;gap:9px;height:140px;padding:0 2px;border-bottom:2px solid var(--line)}
+.chart i{flex:1;height:8%;border-radius:7px 7px 2px 2px;background:#f2c8b3;transition:height .5s steps(5)}
+.chart i:nth-child(6){background:var(--rose)}
+.beat.on .chart i{height:var(--h)}
+.invite{display:flex;gap:14px;align-items:center}
+.qr{width:108px;height:108px;flex:none;border:2.5px solid var(--ink);border-radius:12px;background:
+  conic-gradient(from 90deg at 30% 30%,var(--ink) 25%,transparent 0) 0 0/14px 14px,
+  repeating-linear-gradient(45deg,var(--ink) 0 3px,transparent 3px 7px),#fff;background-blend-mode:normal}
+.code{font:800 26px/1 var(--f-head);letter-spacing:.04em}
+.diary{font:400 18px/1.5 var(--f-voice);border-left:3px solid #ece6f7;padding-left:10px}
+.toggles{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.toggles li{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;background:var(--cream);border-radius:12px;padding:10px 12px}
+.tg{font:700 12.5px var(--f-body);padding:6px 10px;border-radius:99px;background:#fff;border:1.5px solid var(--line);color:var(--body)}
+.tg.on{background:#ece6f7;color:#5a4691;border-color:#5a4691}
+
+/* ---------- credits (pricing, FAQ, ending) roll over the full-bleed film ---------- */
+.credits-roll{position:relative;z-index:2;display:grid;gap:0}
+.cr{min-height:100svh;display:grid;align-content:center;justify-items:center;padding-block:calc(var(--head-top) + var(--head-h) + 28px) 64px}
+.panel{width:min(1080px,100%);background:color-mix(in srgb,var(--paper) 94%,transparent);border:2.5px solid var(--ink);border-radius:30px 34px 28px 36px;
+  box-shadow:6px 8px 0 var(--ink);padding:clamp(22px,3.4vw,44px);display:grid;gap:22px}
+.panel .top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:end;justify-content:space-between}
+.panel h2{font-size:clamp(34px,4vw,60px)}
+.k{font:700 12.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--body)}
+/* pricing */
+.price{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px}
+.free{background:var(--rose);color:#fff;border:2.5px solid var(--ink);border-radius:24px 28px 22px 30px;box-shadow:4px 5px 0 var(--ink);padding:24px 26px;display:grid;gap:14px;align-content:start;position:relative}
+.free .big{font:800 clamp(40px,4.6vw,64px)/1 var(--f-head)}
+.free .big small{display:block;font:700 15px/1.4 var(--f-body);opacity:.92;margin-top:8px}
+.free ul,.plus ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.free li{display:flex;gap:10px;align-items:center;font-weight:700}
+.free li::before{content:"";width:20px;height:20px;flex:none;border-radius:50%;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='%23e2577a' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
+.stamp{position:absolute;top:-16px;right:18px;transform:rotate(6deg);background:var(--paper);color:var(--ink);font:800 14px/1 var(--f-head);padding:8px 12px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:2px 3px 0 var(--ink)}
+.plus{background:var(--paper);border:2.5px dashed var(--ink);border-radius:24px 28px 22px 30px;padding:22px 24px;display:grid;gap:12px;align-content:start}
+.plus h3{font-size:24px}
+.plus .tiers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tier{border:2px solid var(--line);border-radius:16px;padding:10px 12px;background:var(--cream)}
+.tier b{display:block;font:800 22px/1.1 var(--f-head)}
+.tier span{font-size:13px;color:var(--body)}
+.plus li{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:14px;color:var(--body)}
+.plus li::before{content:"+";grid-row:span 2;font:800 18px/1.2 var(--f-head);color:var(--rose)}
+.plus li b{color:var(--ink);font-weight:700}
+.fine{font-size:13.5px;color:var(--body)}
+/* FAQ 2 x N */
+.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.faq details{background:var(--cream);border:2px solid var(--line);border-radius:18px 20px 17px 21px;padding:14px 18px}
+.faq details[open]{background:#fff;border-color:var(--ink);box-shadow:3px 4px 0 var(--ink)}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;font:700 17.5px/1.35 var(--f-head)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:22px;line-height:1;color:var(--rose)}
+.faq details[open] summary::after{content:"–"}
+.faq summary:focus-visible{outline:2px solid var(--rose);outline-offset:4px;border-radius:6px}
+.faq p{margin-top:8px;color:var(--body);font-size:15px}
+/* ending */
+.end{text-align:center;justify-items:center}
+.end .voice{display:inline-block;text-align:left}
+.mail{user-select:all;font-weight:700;color:var(--ink)}
+.foot{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;width:min(1080px,100%);color:#fff;font-size:14px;margin-top:22px;text-shadow:0 1px 3px #0008}
+.foot a{color:inherit}
+.note{position:fixed;z-index:60;right:var(--gr);bottom:14px;max-width:300px;font:600 12px/1.45 var(--f-body);background:var(--ink);color:var(--cream);padding:9px 12px;border-radius:12px;opacity:.92}
+
+/* ---------- phone ---------- */
+@media (max-width:860px){
+  :root{--edge:10px;--head-top:calc(env(safe-area-inset-top,0px) + 30px);--head-h:46px;--screen-w:auto;--screen-top:calc(var(--head-top) + var(--head-h) + 22px);--band:calc(var(--screen-top) + min(36svh,66vw) + 14px)}
+  .head{gap:10px}
+  .clap{width:96px;left:calc(var(--gl) + 20px);height:14px}
+  .tab{font-size:9px}.tab b{font-size:11.5px}
+  .cells{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent);padding-right:18px}
+  .cells a{font-size:13px;padding:8px 9px}
+  .head{left:12px;right:12px;width:auto;max-width:none}
+  .head .btn{display:none}
+  .screen{left:var(--gl);right:var(--gr);width:auto;bottom:auto;height:min(36svh,66vw);border-radius:20px;box-shadow:0 0 0 6px var(--clay),0 14px 24px -12px #3a2a2255}
+  body.credits .screen{right:0;height:100%}
+  .subs{margin-left:0;padding:0}
+  .scene{max-width:none}
+  .stage{position:static;height:auto;display:block}
+  .beats{display:block}
+  .beats>.beat{visibility:visible!important;padding:20px 0 36px}
+  .marks{display:none}
+  .scene-head{position:relative;top:auto;margin-top:28px;background:none;padding:0}
+  .scene-head.hero{padding-top:8px}
+  .subs{padding-top:calc(var(--band) + 8px)}
+  body::before{content:"";position:fixed;z-index:15;left:0;right:0;top:0;height:var(--band);background:var(--cream);box-shadow:0 10px 16px -10px #3a2a2240}
+  body.credits::before{display:none}
+  body.credits .screen{z-index:1}
+  .screen{z-index:20}
+    .beat .voice,.beat .app,.beat .desc,.beat .row{opacity:1;transform:none}
+  .cr{padding-top:calc(var(--head-top) + var(--head-h) + 24px)}
+  .price{grid-template-columns:1fr}
+  .faq{grid-template-columns:1fr}
+  .note{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .screen,.screen img,.screen::after{transition:none;animation:none}
+  .btn{transition:none}
+}
+</style>
+
+<header class="head" id="head">
+  <span class="tab" aria-live="polite"><i class="live" aria-hidden="true"></i>Đang chiếu · <b id="scname">Mở đầu</b></span>
+  <a class="brand" href="#c0"><img src="img/icon.png" alt="">Vun Vén</a>
+  <nav class="cells" aria-label="Tính năng">
+    <a href="#c1" data-i="1">Cảm xúc</a>
+    <a href="#c2" data-i="2">Sức khỏe</a>
+    <a href="#c3" data-i="3">Chi tiêu</a>
+    <a href="#c4" data-i="4">Gia đình</a>
+    <a href="#c5" data-i="5">Riêng tư</a>
+    <span class="div" aria-hidden="true"></span>
+    <a href="#c6" data-i="6" class="cc">Miễn phí</a>
+    <a href="#c7" data-i="7" class="cc">Hỏi đáp</a>
+  </nav>
+  <a class="btn" href="#c8">Nhận tin ra mắt</a>
+</header>
+
+<span class="clap" id="clap" aria-hidden="true"></span>
+<div class="screen" id="screen" role="img" aria-label="Màn phim: một ngày của Hun">
+  <img id="plate" src="img/00-1.webp" alt="">
+  <span class="flash" id="flash"></span>
+  <span class="tc" id="tc">● REC 00:00:00:00</span>
+</div>
+
+<main>
+  <div class="subs">
+<section class="scene" id="c0" data-i="0">
+<div class="stage"><div class="scene-head hero"><span class="when">Vun Vén · sắp có trên iPhone</span><h1>Khéo vén,<br>giỏi <em>vun.</em></h1><p class="desc">Từ chuyện chi tiêu đến sức khỏe, nhà mình cùng chăm chút mỗi ngày. Có Hun bên cạnh, mình vun vén từng chút.</p><div class="row"><a class="btn" href="#c8"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 5 6.4 5c2 0 3.6 1.1 4.6 2.6C12 6.1 13.6 5 15.6 5 19 5 21.1 8.3 19.6 11.8 17.5 16.4 12 21 12 21z"/></svg>Nhận tin ra mắt</a><a class="btn soft" href="#c1">Xem phim</a></div></div>
+<div class="beats"><div class="beat" data-shot="00a"><p class="voice">Ở một con hẻm nhỏ, có một tổ ấm nhỏ.</p>
+</div>
+<div class="beat" data-shot="00b"><p class="voice">Và một chú cánh cụt tên Hun.</p>
+</div>
+<div class="beat" data-shot="00c"><p class="voice">Hun khéo vén, giỏi vun cho cả nhà.</p>
+
+</div></div></div>
+<div class="marks"><div class="mark" data-shot="00a"></div><div class="mark" data-shot="00b"></div><div class="mark" data-shot="00c"></div></div>
+</section>
+<section class="scene" id="c1" data-i="1">
+<div class="stage"><div class="scene-head"><span class="when"><img src="img/ic-category-heart.webp" alt="">Cảm xúc</span><h2>Giữ lòng <em>nhẹ</em></h2><p class="desc">Mỗi sáng một phút nghe lòng mình. Bảy mức cảm xúc, gọi tên rồi giữ cho riêng mình.</p><div class="chips"><span class="chip v">Bảy mức cảm xúc</span><span class="chip v">Gọi tên cảm xúc</span><span class="chip">Chỉ mình bạn xem</span></div></div>
+<div class="beats"><div class="beat" data-shot="01a"><p class="voice">Mỗi sáng, Hun hỏi lòng mình một câu.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>07:02</time></div><p class="q">Hôm nay, lòng mình thế nào?</p><div class="faces dim"><img src="img/m1.webp" alt="" class="f1"><img src="img/m2.webp" alt="" class="f2"><img src="img/m3.webp" alt="" class="f3"><img src="img/m4.webp" alt="" class="f4"><img src="img/m5.webp" alt="" class="f5"><img src="img/m6.webp" alt="" class="f6"><img src="img/m7.webp" alt="" class="f7"></div><span class="pill-btn">Ghi cảm xúc</span></div>
+</div>
+<div class="beat" data-shot="01b"><p class="voice">Chọn một trong bảy mặt cảm xúc.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>07:03</time></div><p class="q">Lúc này, bạn thấy sao?</p><div class="faces pick"><img src="img/m1.webp" alt="" class="f1"><img src="img/m2.webp" alt="" class="f2"><img src="img/m3.webp" alt="" class="f3"><img src="img/m4.webp" alt="" class="f4"><img src="img/m5.webp" alt="" class="f5"><img src="img/m6.webp" alt="" class="f6"><img src="img/m7.webp" alt="" class="f7"></div><div class="slider"><i style="--v:83%"></i></div><p class="state">Dễ chịu</p></div>
+</div>
+<div class="beat" data-shot="01c"><p class="voice">Gọi tên cảm xúc, giữ cho riêng mình.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>07:04</time></div><p class="q">Gọi tên cảm xúc</p><div class="tags"><span class="on">Biết ơn</span><span class="on">Bình yên</span><span>Hào hứng</span><span>Yên tâm</span></div><p class="lock">Mặc định, chỉ mình bạn xem bản ghi này.</p><span class="pill-btn ok">Đã lưu cảm xúc</span></div>
+</div></div></div>
+<div class="marks"><div class="mark" data-shot="01a"></div><div class="mark" data-shot="01b"></div><div class="mark" data-shot="01c"></div></div>
+</section>
+<section class="scene" id="c2" data-i="2">
+<div class="stage"><div class="scene-head"><span class="when"><img src="img/ic-category-health.webp" alt="">Sức khỏe</span><h2>Giữ người <em>khỏe</em></h2><p class="desc">Nhắc thuốc, ghi số đo cho cả nhà. Ba mẹ ở xa không cần cài app, bạn ghi giúp.</p><div class="chips"><span class="chip">Nhắc uống thuốc</span><span class="chip">Huyết áp, đường huyết</span><span class="chip">Ghi giúp ba mẹ</span><span class="chip">PDF gửi bác sĩ</span></div></div>
+<div class="beats"><div class="beat" data-shot="02a"><p class="voice">Mười hai giờ. Đến giờ uống thuốc của ba.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>12:00</time></div><div class="notif"><b>Nhắc uống thuốc</b><span>Thuốc huyết áp của ba · 1 viên</span></div><div class="row2"><span class="pill-btn ok">Đã uống</span><span class="pill-btn ghost">Nhắc lại sau</span></div></div>
+</div>
+<div class="beat" data-shot="02b"><p class="voice">Hun chia thuốc đủ bảy ngày.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>12:02</time></div><p class="q">Lịch thuốc tuần này · Ba</p><div class="week"><span class="done">T2</span><span class="done">T3</span><span class="done">T4</span><span class="now">T5</span><span class="">T6</span><span class="">T7</span><span class="">CN</span></div><p class="state small">Còn 3 ngày · Hun nhắc mỗi trưa</p></div>
+</div>
+<div class="beat" data-shot="02c"><p class="voice">Số đo ổn rồi. Ba mẹ ở xa, nhà mình vẫn yên tâm.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>12:05</time></div><p class="q">Huyết áp · Ba</p><p class="big">118<span>/76</span> <small>mmHg</small></p><span class="badge">Trong ngưỡng tham khảo</span><p class="lock">Chỉ ghi số đo, không chẩn đoán.</p></div>
+</div></div></div>
+<div class="marks"><div class="mark" data-shot="02a"></div><div class="mark" data-shot="02b"></div><div class="mark" data-shot="02c"></div></div>
+</section>
+<section class="scene" id="c3" data-i="3">
+<div class="stage"><div class="scene-head"><span class="when"><img src="img/ic-category-wallet.webp" alt="">Chi tiêu</span><h2>Giữ ví <em>khỏe</em></h2><p class="desc">Ghi thu chi trong vài giây. Dán tin ngân hàng, kiểm tra rồi lưu. Không liên kết tài khoản, không hỏi OTP.</p><div class="chips"><span class="chip t">Ghi thu chi</span><span class="chip t">Dán tin ngân hàng</span><span class="chip t">Ngân sách theo nhịp</span></div></div>
+<div class="beats"><div class="beat" data-shot="03a"><p class="voice">Chiều về, giỏ đi chợ đầy ắp.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>18:40</time></div><p class="q">Hôm nay chi</p><p class="big">0<span>đ</span></p><div class="row2"><span class="pill-btn">Ghi giao dịch</span><span class="pill-btn ghost">Dán tin ngân hàng</span></div></div>
+</div>
+<div class="beat" data-shot="03b"><p class="voice">Dán tin ngân hàng, Hun điền giúp từng khoản.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>18:42</time></div><p class="sms">TK 0123xxx −185,000VND 18:42 ND: CHO CHIEU</p><div class="arrow">↓</div><div class="txn"><img class="ic" src="img/market.webp" alt=""><div><b>Đi chợ</b><small>Tài khoản ngân hàng · Hôm nay</small></div><b class="amt">−185.000đ</b></div></div>
+</div>
+<div class="beat" data-shot="03c"><p class="voice">Từng đồng nhỏ, vun thành hũ đầy.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>18:45</time></div><p class="q">Ngân sách tháng</p><div class="bar"><i style="--v:38%"></i></div><div class="row2 between"><span class="state small">Đã dùng 38%</span><span class="badge">Đúng nhịp</span></div><p class="lock">Còn lại 6.200.000đ cho 16 ngày.</p></div>
+</div></div></div>
+<div class="marks"><div class="mark" data-shot="03a"></div><div class="mark" data-shot="03b"></div><div class="mark" data-shot="03c"></div></div>
+</section>
+<section class="scene" id="c4" data-i="4">
+<div class="stage"><div class="scene-head"><span class="when"><img src="img/ic-settings-usersthree.webp" alt="">Gia đình</span><h2>Ngồi lại <em>cùng nhau</em></h2><p class="desc">Cuối tuần cả nhà nhìn lại, chọn một điều cho tuần tới. Mời người thương cùng vào tổ ấm.</p><div class="chips"><span class="chip p">Nhìn lại tuần</span><span class="chip p">Mã mời, QR</span><span class="chip p">Giỗ, sinh nhật âm lịch</span></div></div>
+<div class="beats"><div class="beat" data-shot="04a"><p class="voice">Chủ nhật, cả nhà ngồi lại.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>CN 16:00</time></div><p class="q">Nhìn lại tuần · 9–15/11</p><p class="big">1.240.000<span>đ</span></p><p class="state small">Tổng chi tuần này</p></div>
+</div>
+<div class="beat" data-shot="04b"><p class="voice">Tuần này mình chi ít hơn tuần trước.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>CN 16:05</time></div><p class="q">Chi từng ngày trong tuần</p><div class="chart"><i style="--h:62%"></i><i style="--h:40%"></i><i style="--h:78%"></i><i style="--h:55%"></i><i style="--h:30%"></i><i style="--h:88%"></i><i style="--h:46%"></i></div><div class="row2 between"><span class="state small">Đi chợ chiếm 46%</span><span class="badge">−12% so với tuần trước</span></div></div>
+</div>
+<div class="beat" data-shot="04c"><p class="voice">Mời người thương cùng vào tổ ấm.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>CN 16:10</time></div><p class="q">Mời người thương</p><div class="invite"><div class="qr" aria-hidden="true"></div><div><p class="code">HUN·4821</p><p class="state small">Mã mời hoặc quét QR</p></div></div><span class="pill-btn">Gửi lời mời</span></div>
+</div></div></div>
+<div class="marks"><div class="mark" data-shot="04a"></div><div class="mark" data-shot="04b"></div><div class="mark" data-shot="04c"></div></div>
+</section>
+<section class="scene" id="c5" data-i="5">
+<div class="stage"><div class="scene-head"><span class="when"><img src="img/ic-settings-lock.webp" alt="">Riêng tư</span><h2>Giữ chuyện <em>nhà mình</em></h2><p class="desc">Nhật ký và cảm xúc mặc định chỉ mình bạn xem. AI trực tuyến tắt sẵn. Không quảng cáo, không bán dữ liệu.</p><div class="chips"><span class="chip">Nhật ký riêng</span><span class="chip">AI tắt sẵn</span><span class="chip">Không quảng cáo</span></div></div>
+<div class="beats"><div class="beat" data-shot="05a"><p class="voice">Có những điều chỉ muốn kể cho mình nghe.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>22:10</time></div><p class="q">Nhật ký · Hôm nay</p><p class="diary">Hôm nay mình thấy biết ơn vì…</p><p class="lock">Chỉ mình tôi</p></div>
+</div>
+<div class="beat" data-shot="05b"><p class="voice">Nhật ký khoá lại. Chỉ mình bạn xem.</p>
+<div class="app "><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>22:12</time></div><ul class="toggles"><li>Nhật ký &amp; cảm xúc<span class="tg on">Chỉ mình tôi</span></li><li>AI trực tuyến<span class="tg">Tắt</span></li><li>Quảng cáo<span class="tg">Không có</span></li></ul></div>
+</div>
+<div class="beat" data-shot="05c"><p class="voice">Ngủ ngon nha. Mai mình lại chăm chút.</p>
+<div class="app dark"><div class="app-bar"><img src="img/icon.png" alt=""><span>Vun Vén</span><time>22:30</time></div><p class="q night">Chúc cả nhà ngủ ngon</p><p class="state small">Hôm nay: 1 cảm xúc · 1 số đo · 2 khoản chi</p></div>
+</div></div></div>
+<div class="marks"><div class="mark" data-shot="05a"></div><div class="mark" data-shot="05b"></div><div class="mark" data-shot="05c"></div></div>
+</section>
+</div>
+
+  <div class="credits-roll">
+    <section class="cr" id="c6" data-i="6">
+      <div class="panel">
+        <div class="top"><div><span class="k">Vé xem phim</span><h2>Miễn phí <em>trọn đời.</em></h2></div><p class="desc">Một gói, cả nhà cùng dùng. Muốn thêm thì có Hun Plus.</p></div>
+        <div class="price">
+          <div class="free">
+            <span class="stamp">0đ mãi mãi</span>
+            <div class="big">Vé trọn đời<small>Mọi việc hằng ngày của nhà mình, không giới hạn thời gian.</small></div>
+            <ul>
+              <li>Ghi thu chi, theo dõi ngân sách</li>
+              <li>Ghi cảm xúc mỗi ngày</li>
+              <li>Chỉ số sức khỏe cả nhà</li>
+              <li>Nhắc uống thuốc</li>
+              <li>Cảnh báo cho người nhà</li>
+              <li>Mời người thương cùng vào tổ ấm</li>
+            </ul>
+          </div>
+          <div class="plus">
+            <span class="k">Vé thêm · tuỳ chọn</span>
+            <h3>Hun Plus</h3>
+            <div class="tiers"><div class="tier"><b>49.000đ</b><span>mỗi tháng</span></div><div class="tier"><b>399.000đ</b><span>mỗi năm · thử 14 ngày</span></div></div>
+            <ul>
+              <li><b>Báo cáo tuần, tháng</b>Hiểu thói quen của nhà mình</li>
+              <li><b>PDF gửi bác sĩ</b>Số đo và thuốc, 3 đến 12 tháng</li>
+              <li><b>Tự điền chi tiêu</b>Từ tin ngân hàng, không cần gõ</li>
+              <li><b>Hồ sơ cả nhà, 5 GB</b>Không giới hạn hồ sơ, lưu kết quả khám</li>
+            </ul>
+          </div>
+        </div>
+        <p class="fine">Giá Hun Plus là dự kiến, có thể đổi khi mở bán. Gói tự gia hạn, huỷ trong Cài đặt của iPhone.</p>
+      </div>
+    </section>
+
+    <section class="cr" id="c7" data-i="7">
+      <div class="panel">
+        <div class="top"><div><span class="k">Hậu trường</span><h2>Mình hỏi <em>một chút</em></h2></div><p class="desc">Còn điều muốn hỏi, nhắn tụi mình qua <span class="mail">support@tdk.best</span></p></div>
+        <div class="faq">
+          <details open><summary>Mỗi ngày mình cần ghi những gì?</summary><p>Bắt đầu từ điều đang muốn theo dõi: một khoản chi, cảm xúc hôm nay hay số đo sức khỏe. Không cần ghi đủ mọi mục mỗi ngày.</p></details>
+          <details><summary>Có cần liên kết ngân hàng không?</summary><p>Không cần. Nhập tay hoặc dán tin ngân hàng để điền nhanh. Vun Vén không kết nối tài khoản, không hỏi mật khẩu hay OTP.</p></details>
+          <details><summary>Cả nhà có thấy hết mình ghi không?</summary><p>Nhật ký và cảm xúc mặc định chỉ mình bạn xem. Thu chi, bạn chọn ghi chung hay riêng. Sức khỏe, bạn chọn từng người được xem.</p></details>
+          <details><summary>Ghi giúp ba mẹ ở xa được không?</summary><p>Được. Tạo hồ sơ cho ba mẹ để ghi chỉ số, quản lý thuốc và lịch khám, ba mẹ không cần cài app.</p></details>
+          <details><summary>Miễn phí trọn đời thật không?</summary><p>Thật. Ghi chép, nhắc nhở, cảnh báo người nhà luôn miễn phí. Hun Plus chỉ thêm báo cáo, PDF và giới hạn cao hơn.</p></details>
+          <details><summary>Nhà mình cần mấy gói Hun Plus?</summary><p>Một gói là đủ cho cả tổ ấm. Một người đăng ký, cả nhà cùng dùng.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cr end" id="c8" data-i="8">
+      <div class="panel end">
+        <span class="k">Hết phim</span>
+        <h2>Sắp công chiếu <em>trên iPhone</em></h2>
+        <p class="voice">Mai mình lại chăm chút cho nhà mình.</p>
+        <a class="btn" href="#c8">Nhận tin ra mắt</a>
+        <p class="fine">Hoặc nhắn tụi mình: <span class="mail">support@tdk.best</span></p>
+      </div>
+      <footer class="foot"><span>© 2026 Vun Vén · tdk.best</span><span><a href="https://tdk.best/product/vunven/privacy">Quyền riêng tư</a> · <a href="https://tdk.best/product/vunven/termandcondition">Điều khoản</a></span></footer>
+    </section>
+  </div>
+</main>
+
+<p class="note">Bản duyệt. Phim đang dùng cảnh tạm, mỗi cảnh 1 shot. Codex đang quay 21 shot mới (3 shot mỗi cảnh, Hun v2).</p>
+
+<script>
+(function(){
+  // Shots: id -> {scene index, frame count, file prefix}. Until the new 3-shot footage lands, every shot of a scene
+  // plays that scene's current loop; swap the table to the per-shot files when they exist.
+  var NAMES=['Mở đầu','Cảm xúc','Sức khỏe','Chi tiêu','Gia đình','Riêng tư','Miễn phí','Hỏi đáp','Hẹn gặp'];
+  var SHOTS=window.SHOTS||{};
+  ['00','01','02','03','04','05'].forEach(function(sc){['a','b','c'].forEach(function(l){if(!SHOTS[sc+l])SHOTS[sc+l]={n:6,pre:'img/'+sc+'-'}})});
+  ['06','07','08'].forEach(function(sc){if(!SHOTS[sc])SHOTS[sc]={n:0,pre:'img/'+sc}});
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var plate=document.getElementById('plate'),flash=document.getElementById('flash'),tc=document.getElementById('tc');
+  var scn=document.getElementById('scn'),scname=document.getElementById('scname'),shotEl=document.getElementById('shot'),slate=null;
+  var cells=[].slice.call(document.querySelectorAll('.cells a'));
+  function src(id,f){var s=SHOTS[id];return s.n?s.pre+(f+1)+'.webp':s.pre+'.webp';}
+  var warmed={};function warm(id){if(!id||warmed[id]||!SHOTS[id])return;warmed[id]=1;for(var f=0;f<Math.max(1,SHOTS[id].n);f++)new Image().src=src(id,f);}
+  var order=Object.keys(SHOTS).sort();order.slice(0,2).forEach(warm);
+  var cur=null,frame=0,dir=1,hold=0,t0=performance.now();
+  function cut(id){
+    if(id===cur)return;var prev=cur;cur=id;frame=0;dir=1;hold=0;t0=performance.now();
+    var i=parseInt(id,10),letter=id.length>2?id.slice(2).toUpperCase():'A';
+    document.body.classList.toggle('credits',i>=6);
+    cells.forEach(function(c){c.classList.toggle('on',+c.dataset.i===i)});
+    var act=document.querySelector('.cells a.on'),nav=document.querySelector('.cells');if(act&&nav.scrollWidth>nav.clientWidth){nav.scrollTo({left:act.offsetLeft-nav.offsetLeft-nav.clientWidth/2+act.offsetWidth/2,behavior:'smooth'});}
+    scname.textContent=NAMES[i];
+    document.querySelectorAll('.beat').forEach(function(b){b.classList.toggle('on',b.dataset.shot===id)});
+    var k=order.indexOf(id);warm(order[k+1]);warm(order[k+2]);
+    if(reduce){plate.src=src(id,0);return;}
+    if(!prev||prev.slice(0,2)!==id.slice(0,2)){var h=document.getElementById('clap');h.classList.add('snap');setTimeout(function(){h.classList.remove('snap')},180);}
+    flash.style.opacity=.75;setTimeout(function(){plate.src=src(id,0);flash.style.opacity=.35},83);setTimeout(function(){flash.style.opacity=0},166);
+  }
+  cut('00a');
+  // 12 fps clock: each frame held 3 ticks, ping-pong with a short rest at both ends.
+  setInterval(function(){
+    var ms=performance.now()-t0,s=Math.floor(ms/1000),ff=Math.floor(ms%1000/83.3),p=function(n){return('0'+n).slice(-2)};
+    tc.textContent='● REC 00:'+p(Math.floor(s/60)%60)+':'+p(s%60)+':'+p(ff);
+    var n=SHOTS[cur].n;if(reduce||n<2)return;
+    if(++hold<3)return;hold=0;
+    var next=frame+dir;if(next>=n||next<0){dir=-dir;hold=-6;return;}
+    frame=next;plate.src=src(cur,frame);
+  },83);
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)cut(e.target.dataset.shot)})},{rootMargin:'-48% 0px -48% 0px'});
+  var mobile=matchMedia('(max-width:860px)').matches;document.querySelectorAll(mobile?'.beat':'.mark').forEach(function(b){io.observe(b)});
+  document.querySelectorAll('section.cr').forEach(function(c){c.dataset.shot=('0'+c.dataset.i).slice(-2);io.observe(c)});
+  [].slice.call(document.querySelectorAll('.cells a')).forEach(function(c){c.addEventListener('click',function(e){var t=document.querySelector(c.getAttribute('href'));if(!t)return;e.preventDefault();
+    var first=t.querySelector('.beat')||t;window.scrollTo({top:first.getBoundingClientRect().top+scrollY-(innerHeight*.3),behavior:reduce?'auto':'smooth'})})});
+})();
+</script>

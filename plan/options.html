@@ -1,0 +1,292 @@
+<title>Vun Vén Phương Án</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&family=Itim&display=swap">
+<style>
+/* Layout: a review sheet. Three concept mockups (live, scaled with container units), a comparison, and what stays. */
+:root{
+  color-scheme:light;
+  --cream:#f6ede2; --clay:#efe2d1; --paper:#fffaf3; --ink:#3a2a22; --body:#7a665a; --line:#e6d6c3;
+  --rose:#e2577a; --sage:#8fae8b; --film:#1f1915; --gold:#e9c9a0;
+  --f-head:"Baloo 2","Quicksand",system-ui,sans-serif; --f-body:"Quicksand",system-ui,sans-serif; --f-voice:"Itim","Quicksand",cursive;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace; --ease:cubic-bezier(.22,.8,.24,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font:500 16px/1.6 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-head);font-weight:800;margin:0;line-height:1.1;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-block:48px 96px;display:grid;gap:80px}
+.lede{color:var(--body);max-width:64ch;margin-top:12px;font-size:17px}
+.k{font:700 12px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--rose)}
+header h1{font-size:clamp(34px,5vw,56px);margin-top:10px}
+.thesis{margin-top:22px;background:var(--paper);border:2.5px solid var(--ink);border-radius:20px 24px 18px 26px;box-shadow:4px 5px 0 var(--ink);padding:18px 22px;max-width:780px}
+.thesis b{font-family:var(--f-head)}
+
+.opt{display:grid;gap:18px}
+.opt-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.opt-head .tag{font:800 13px var(--f-head);background:var(--ink);color:var(--paper);padding:5px 11px;border-radius:999px}
+.opt-head .tag.rec{background:var(--rose)}
+.opt-head h2{font-size:clamp(28px,3.4vw,40px)}
+.opt-desc{color:var(--body);max-width:72ch}
+.frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(520px,100%),1fr));gap:18px}
+.frame{display:grid;gap:8px;min-width:0}
+.frame figcaption{font:600 13px var(--f-body);color:var(--body)}
+.mock{container-type:inline-size;position:relative;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:var(--film);
+  box-shadow:0 0 0 2.5px var(--ink),5px 6px 0 var(--ink);max-width:100%}
+.pros{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px}
+.pros div{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:12px 16px;font-size:14.5px}
+.pros b{display:block;font-family:var(--f-head);font-size:16px;margin-bottom:2px}
+.pros .plus b{color:#2f6b45}.pros .minus b{color:#9c2c49}
+
+/* shared mock bits (sized in container units so the mock scales like a screenshot) */
+.m-bar{position:absolute;left:50%;top:0;translate:-50% 0;z-index:5;display:flex;align-items:center;gap:1.6cqw;padding:.9cqw 1.4cqw;background:var(--paper);
+  border:.25cqw solid var(--ink);border-top:0;border-radius:0 0 2.4cqw 2.4cqw;font:700 1.3cqw/1 var(--f-body);color:var(--body);white-space:nowrap}
+.m-bar b{font:800 1.6cqw/1 var(--f-head);color:var(--ink)}
+.m-bar i{font-style:normal;background:var(--rose);color:#fff;padding:.6cqw 1.1cqw;border-radius:99px;font-weight:800}
+.m-phone{position:absolute;width:15cqw;aspect-ratio:9/19.3;background:#1d1a1e;border-radius:2.6cqw;padding:.6cqw;box-shadow:0 0 0 .22cqw var(--ink),.5cqw .7cqw 0 var(--ink)}
+.m-phone div{width:100%;height:100%;border-radius:2.1cqw;background:repeating-linear-gradient(135deg,#fffaf3 0 .8cqw,#f4e9db .8cqw 1.6cqw);display:grid;place-content:center;text-align:center;
+  font:800 1.25cqw/1.3 var(--f-head);color:var(--ink);padding:1cqw}
+.m-phone small{display:block;font:600 .95cqw var(--f-body);color:var(--body)}
+.m-sub{font:400 1.9cqw/1.3 var(--f-voice);color:#fff8ec;background:#1f1915c4;padding:.6cqw 1.4cqw .8cqw;border-radius:1cqw;text-align:center}
+.grain::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;mix-blend-mode:multiply;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- A: poster ---------- */
+.a-poster{position:absolute;inset:0;background:#2a2320}
+.a-poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.a-poster::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,#1f191500 35%,#1f1915d9 78%,#1f1915 100%)}
+.a-type{position:absolute;z-index:2;left:0;right:0;bottom:3.2cqw;display:grid;justify-items:center;text-align:center;color:#fff8ec;gap:.6cqw}
+.a-kicker{font:700 1.15cqw var(--f-body);letter-spacing:.4em;text-transform:uppercase;color:var(--gold)}
+.a-title{font:800 10.5cqw/.86 var(--f-head);letter-spacing:.08em;color:#fff8ec;text-shadow:0 .4cqw 0 #00000040}
+.a-tag{font:400 2.2cqw/1 var(--f-voice);color:#fff8ec}
+.a-credits{margin-top:.8cqw;font:700 .95cqw/1.5 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:#fff8ecb0;max-width:62cqw}
+.a-credits b{color:#fff8ec}
+.a-btns{display:flex;gap:1.2cqw;margin-top:1cqw}
+.a-btn{font:800 1.4cqw/1 var(--f-head);padding:1.1cqw 1.8cqw;border-radius:99px;border:.22cqw solid var(--ink);box-shadow:.35cqw .45cqw 0 var(--ink);background:var(--rose);color:#fff}
+.a-btn.soft{background:var(--paper);color:var(--ink)}
+.a-chapter{position:absolute;inset:0;background:var(--cream);display:grid;grid-template-columns:1fr auto;align-content:center;gap:2.4cqw;padding:7cqw 4cqw 3cqw}
+.a-num{grid-column:1/-1;display:flex;align-items:baseline;gap:1.6cqw}
+.a-num b{font:800 7cqw/.8 var(--f-head);color:var(--rose)}
+.a-num span{font:800 3.2cqw/1 var(--f-head)}
+.a-num small{font:700 1.2cqw var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--body)}
+.a-shot{position:relative;aspect-ratio:2.39/1;border-radius:1.2cqw;overflow:hidden;box-shadow:0 0 0 .25cqw var(--ink),.5cqw .6cqw 0 var(--ink)}
+.a-shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.a-shot .m-sub{position:absolute;left:50%;bottom:1.6cqw;translate:-50% 0;white-space:nowrap}
+.a-chapter .m-phone{position:relative;width:13cqw}
+.a-lines{grid-column:1/-1;display:flex;gap:1cqw;flex-wrap:wrap}
+.a-lines span{font:700 1.2cqw var(--f-body);background:#ece6f7;color:#5a4691;padding:.5cqw 1cqw;border-radius:1cqw}
+
+/* ---------- B: film strip ---------- */
+.b-room{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 45%,#3a2f29 0%,#1f1915 70%)}
+.b-strip{position:absolute;left:5cqw;top:-2cqw;bottom:-2cqw;width:15cqw;background:#2b2420;border-left:.3cqw solid #3d332d;border-right:.3cqw solid #3d332d;overflow:hidden}
+.b-strip::before,.b-strip::after{content:"";position:absolute;top:0;bottom:0;width:1.6cqw;z-index:2;background:repeating-linear-gradient(180deg,transparent 0 1cqw,#f6ede2cc 1cqw 2.2cqw,transparent 2.2cqw 3.2cqw);background-size:100% 3.2cqw}
+.b-strip::before{left:.4cqw}.b-strip::after{right:.4cqw}
+.b-reel{position:absolute;left:2.4cqw;right:2.4cqw;top:0;display:grid;gap:1.6cqw;transition:transform .9s var(--ease)}
+.b-reel img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:.4cqw;filter:sepia(.25) saturate(.9);opacity:.55;transition:opacity .6s var(--ease),filter .6s var(--ease)}
+.b-reel img.on{opacity:1;filter:none;box-shadow:0 0 0 .25cqw var(--gold)}
+.b-gate{position:absolute;left:4cqw;width:17cqw;top:50%;translate:0 -50%;aspect-ratio:4/3.6;border:.3cqw solid var(--gold);border-radius:.6cqw;z-index:3;box-shadow:0 0 3cqw #e9c9a066}
+.b-beam{position:absolute;z-index:1;left:21cqw;top:50%;width:18cqw;height:46cqw;translate:0 -50%;clip-path:polygon(0 42%,100% 0,100% 100%,0 58%);
+  background:linear-gradient(90deg,#fff3d6aa,#fff3d61a);filter:blur(.4cqw);animation:flick .2s steps(2) infinite}
+@keyframes flick{50%{opacity:.86}}
+.b-screen{position:absolute;left:38cqw;right:4cqw;top:12cqw;aspect-ratio:16/9;border-radius:.8cqw;overflow:hidden;box-shadow:0 0 0 .3cqw #fff3d6,0 0 6cqw #fff3d64d}
+.b-screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .45s var(--ease)}
+.b-cap{position:absolute;left:38cqw;right:4cqw;top:47cqw;display:grid;justify-items:center;gap:.8cqw}
+.b-cap .ch{font:700 1.15cqw var(--f-body);letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.b-room .m-phone{right:2cqw;top:30cqw;width:10cqw;rotate:4deg}
+
+/* ---------- C: private cinema ---------- */
+.c-hall{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 20%,#4a3a30 0%,#241d19 60%,#171210 100%)}
+.c-curtain{position:absolute;top:4cqw;width:19cqw;height:27cqw;background:repeating-linear-gradient(90deg,#5d7a59 0 1.2cqw,#7c9c78 1.2cqw 2.8cqw,#6a8a66 2.8cqw 4cqw);box-shadow:inset 0 -3cqw 3cqw -1cqw #0007}
+.c-curtain.l{left:3cqw;border-radius:0 0 0 2cqw}.c-curtain.r{right:3cqw;border-radius:0 0 2cqw 0}
+.c-screen{position:absolute;left:24cqw;right:24cqw;top:6.5cqw;aspect-ratio:2.2/1;border-radius:.6cqw;overflow:hidden;box-shadow:0 0 0 .35cqw #fff3d6,0 0 7cqw #fff3d659}
+.c-screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .45s var(--ease)}
+.c-screen .m-sub{position:absolute;left:50%;bottom:1.2cqw;translate:-50% 0;white-space:nowrap;font-size:1.5cqw}
+.c-seats{position:absolute;left:0;right:0;top:30.5cqw;height:5cqw;background:
+  radial-gradient(ellipse 3.1cqw 3cqw at 3.2cqw 100%,#5a2e2e 98%,transparent) 0 0/6.4cqw 100% repeat-x;opacity:.95}
+.c-seats::after{content:"";position:absolute;inset:auto 0 -1cqw 0;height:3cqw;background:#171210}
+.c-marquee{position:absolute;left:8cqw;right:8cqw;top:37.5cqw;display:flex;align-items:center;gap:1.4cqw}
+.c-marquee>b{font:800 1.4cqw var(--f-head);color:var(--gold);letter-spacing:.2em;writing-mode:vertical-rl;rotate:180deg}
+.c-posters{display:grid;grid-template-columns:repeat(5,1fr);gap:1.4cqw;flex:1}
+.c-poster{position:relative;aspect-ratio:2/2.65;border-radius:.7cqw;overflow:hidden;cursor:pointer;border:0;padding:0;background:#000;box-shadow:0 0 0 .22cqw #00000080;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.c-poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.c-poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,#1f1915e6)}
+.c-poster span{position:absolute;z-index:1;left:.8cqw;right:.8cqw;bottom:.8cqw;text-align:left;font:800 1.45cqw/1.05 var(--f-head);color:#fff8ec}
+.c-poster small{display:block;font:700 .85cqw var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.c-poster.on{transform:translateY(-.8cqw);box-shadow:0 0 0 .3cqw var(--gold),0 1cqw 2cqw #0008}
+.c-poster:focus-visible{outline:.3cqw solid var(--rose);outline-offset:.3cqw}
+
+/* compare + keep */
+.tbl{overflow-x:auto;background:var(--paper);border:2px solid var(--line);border-radius:16px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14.5px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:700 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--body);background:var(--cream)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700}
+.dots{letter-spacing:2px;color:var(--rose);font-weight:800}
+.keep{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:center}
+.keep .mock{aspect-ratio:16/9}
+.k-bg{position:absolute;inset:0}.k-bg img{width:100%;height:100%;object-fit:cover}
+.k-bg::after{content:"";position:absolute;inset:0;background:#1f191566}
+.k-card{position:absolute;left:8cqw;right:8cqw;top:12cqw;display:grid;grid-template-columns:1.3fr 1fr;gap:1.6cqw;background:#fffaf3f2;border:.3cqw solid var(--ink);border-radius:2.4cqw;padding:2.4cqw;box-shadow:.6cqw .8cqw 0 var(--ink)}
+.k-card h4{grid-column:1/-1;margin:0;font:800 4cqw/1 var(--f-head)}
+.k-card h4 em{font-style:normal;color:var(--rose)}
+.k-free{background:var(--rose);color:#fff;border:.25cqw solid var(--ink);border-radius:1.6cqw;padding:1.6cqw;font:800 3cqw/1 var(--f-head)}
+.k-free small{display:block;font:700 1.2cqw/1.4 var(--f-body);margin-top:.6cqw}
+.k-plus{border:.25cqw dashed var(--ink);border-radius:1.6cqw;padding:1.6cqw;font:800 2cqw/1.2 var(--f-head)}
+.k-plus small{display:block;font:600 1.2cqw/1.4 var(--f-body);color:var(--body)}
+.note{background:var(--paper);border:2.5px solid var(--ink);border-radius:20px 24px 18px 26px;box-shadow:4px 5px 0 var(--ink);padding:18px 22px;display:grid;gap:10px}
+.note ol{margin:0;padding-left:20px;display:grid;gap:6px}
+@media (max-width:760px){.keep{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.b-beam{animation:none}.b-reel,.b-screen img,.c-screen img,.c-poster{transition:none}}
+</style>
+
+<div class="wrap">
+<header>
+  <span class="k">Vun Vén · phần trên landing · 3 phương án</span>
+  <h1>Phim về cuộc đời Hun, người lặng lẽ vun vén cho cả nhà</h1>
+  <p class="lede">Phần dưới giữ nguyên: vé xem phim trên nền Hun full màn hình, hỏi đáp, "Sắp công chiếu". Dưới đây là 3 cách kể phần trên. Mockup bấm được, ảnh là các shot Hun v2 đã có.</p>
+  <div class="thesis"><b>Nguyên tắc chung:</b> cái "wow nghệ thuật" đến từ bố cục và nhịp kể (poster, khung phim, phụ đề, khoảng lặng), không đến từ việc nhồi chuyển động. Cả 3 phương án đều dựa vào khung hình tĩnh đẹp và chuyển động máy quay tiết chế, nên không còn chuyện Hun cử động "phi vật lý".</div>
+</header>
+
+<!-- ============ A ============ -->
+<section class="opt">
+  <div class="opt-head"><span class="tag rec">A · khuyến nghị</span><h2>Poster, trailer, và các chương phim</h2></div>
+  <p class="opt-desc">Mở đầu như trang giới thiệu một bộ phim thật: một poster đất sét toàn màn hình, tên phim to, dòng credits nhỏ, nút xem trailer. Cuộn xuống là 5 chương trong một ngày của Hun. Mỗi chương có số lớn, một khung phim tỉ lệ điện ảnh 2.39:1 kèm phụ đề, và iPhone đặt cạnh. Nhịp chậm, nhiều khoảng thở, rất "biên tập".</p>
+  <div class="frames">
+    <figure class="frame" style="margin:0">
+      <div class="mock grain">
+        <div class="a-poster"><img src="img/00c.webp" alt="Hun vẫy tay trước cửa nhà"></div>
+        <div class="m-bar"><b>Vun Vén</b>Một ngày của Hun · Miễn phí · Hỏi đáp<i>Nhận tin</i></div>
+        <div class="a-type">
+          <span class="a-kicker">Một phim đất sét</span>
+          <span class="a-title">VUN VÉN</span>
+          <span class="a-tag">khéo vén · giỏi vun</span>
+          <span class="a-credits">Hun <b>trong vai</b> người giữ nhà · cùng ba, mẹ và những người thương · <b>Sắp công chiếu trên iPhone</b></span>
+          <div class="a-btns"><span class="a-btn">▶ Xem trailer</span><span class="a-btn soft">Nhận tin ra mắt</span></div>
+        </div>
+      </div>
+      <figcaption>Màn đầu: poster phim. Nút trailer mở một đoạn dựng 20–30 giây ghép từ các shot.</figcaption>
+    </figure>
+    <figure class="frame" style="margin:0">
+      <div class="mock">
+        <div class="a-chapter">
+          <div class="a-num"><b>01</b><span>Buổi sáng của Hun</span><small>Chương một · Cảm xúc</small></div>
+          <div class="a-shot"><img src="img/01b.webp" alt="Hun chọn mặt cảm xúc"><span class="m-sub">Sáng nay, lòng mình thấy sao?</span></div>
+          <div class="m-phone"><div>Chọn cảm xúc<small>ảnh app thật</small></div></div>
+          <div class="a-lines"><span>Bảy mức cảm xúc</span><span>Gọi tên cảm xúc</span><span>Chỉ mình bạn xem</span></div>
+        </div>
+      </div>
+      <figcaption>Khi cuộn: mỗi chương một màn. Khung phim trôi nhẹ, phụ đề hiện từng chữ như phim chiếu.</figcaption>
+    </figure>
+  </div>
+  <div class="pros"><div class="plus"><b>Được</b>Tinh tế, dễ đọc, sang. Poster là thứ người ta chụp màn hình và chia sẻ.</div><div class="plus"><b>Asset</b>Cần 1 tấm key art cho poster và 5 shot đẹp. Đã có gần đủ.</div><div class="minus"><b>Lưu ý</b>Ít "trò chơi" hơn. Cái wow nằm ở thẩm mỹ, không nằm ở hiệu ứng.</div></div>
+</section>
+
+<!-- ============ B ============ -->
+<section class="opt">
+  <div class="opt-head"><span class="tag">B</span><h2>Cuộn phim nhựa qua máy chiếu</h2></div>
+  <p class="opt-desc">Một dải phim 35mm chạy dọc bên trái, mỗi ô là một khoảnh khắc trong ngày của Hun. Cuộn trang thì dải phim trượt qua cửa máy chiếu. Ô đang nằm trong cửa được chiếu phóng to lên màn bên phải bằng một luồng sáng chập chờn. Phụ đề nằm dưới màn chiếu.</p>
+  <div class="frames">
+    <figure class="frame" style="margin:0">
+      <div class="mock" id="bMock">
+        <div class="b-room">
+          <div class="b-strip"><div class="b-reel" id="bReel"></div></div>
+          <div class="b-gate"></div>
+          <div class="b-beam"></div>
+          <div class="b-screen"><img src="img/01a.webp" alt="" id="bBack"><img id="bScreen" src="img/01a.webp" alt=""></div>
+          <div class="b-cap"><span class="ch" id="bCh">Chương 1 · Buổi sáng</span><span class="m-sub" id="bSub">Mỗi sáng, Hun hỏi lòng mình một câu.</span></div>
+          <div class="m-phone"><div id="bPhone">Cảm xúc<small>ảnh app thật</small></div></div>
+        </div>
+        <div class="m-bar"><b>Vun Vén</b>Một ngày của Hun · Miễn phí · Hỏi đáp<i>Nhận tin</i></div>
+      </div>
+      <figcaption>Mockup tự chạy để thấy nhịp. Trên trang thật, dải phim chạy theo thao tác cuộn.</figcaption>
+    </figure>
+  </div>
+  <div class="pros"><div class="plus"><b>Được</b>Rất đậm chất phim, độc đáo, chuyển động tự nhiên (phim trượt, đèn chiếu), không phụ thuộc nhân vật cử động.</div><div class="plus"><b>Asset</b>Chỉ cần ảnh tĩnh. Đã có đủ.</div><div class="minus"><b>Lưu ý</b>Trên điện thoại, dải phim phải nằm ngang phía trên màn chiếu. Bố cục chật hơn.</div></div>
+</section>
+
+<!-- ============ C ============ -->
+<section class="opt">
+  <div class="opt-head"><span class="tag">C</span><h2>Rạp chiếu riêng của nhà Hun</h2></div>
+  <p class="opt-desc">Người xem như đang ngồi trong một rạp phim đất sét nhỏ: rèm nhung, hàng ghế, màn chiếu sáng. Bên dưới là bảng "Đang chiếu" với 5 poster phim ngắn, mỗi tính năng một phim. Bấm poster nào thì màn chiếu phát phim đó. Giống một rạp chiếu thật, không bắt người xem phải cuộn.</p>
+  <div class="frames">
+    <figure class="frame" style="margin:0">
+      <div class="mock grain">
+        <div class="c-hall">
+          <div class="c-curtain l"></div><div class="c-curtain r"></div>
+          <div class="c-screen"><img id="cScreen" src="img/01a.webp" alt=""><span class="m-sub" id="cSub">Mỗi sáng, Hun hỏi lòng mình một câu.</span></div>
+          <div class="c-seats"></div>
+          <div class="c-marquee"><b>Đang chiếu</b><div class="c-posters" id="cPosters"></div></div>
+        </div>
+        <div class="m-bar"><b>Vun Vén</b>Đang chiếu · Miễn phí · Hỏi đáp<i>Nhận tin</i></div>
+      </div>
+      <figcaption>Bấm vào poster để đổi phim trên màn chiếu.</figcaption>
+    </figure>
+  </div>
+  <div class="pros"><div class="plus"><b>Được</b>Không gian rạp phim rõ nhất, tương tác vui, mỗi tính năng thành một "bộ phim".</div><div class="plus"><b>Asset</b>Cần thêm 5 poster dọc và 1 phòng chiếu đất sét (Codex vẽ được).</div><div class="minus"><b>Lưu ý</b>Người xem phải chủ động bấm. Câu chuyện "một ngày của Hun" bị chia thành từng phim rời.</div></div>
+</section>
+
+<section class="opt">
+  <h2 style="font-size:clamp(26px,3vw,36px)">So sánh nhanh</h2>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>A · Poster + chương</th><th>B · Phim nhựa</th><th>C · Rạp riêng</th></tr></thead>
+    <tbody>
+      <tr><td>Tinh tế, nghệ thuật</td><td class="dots">●●●●●</td><td class="dots">●●●●○</td><td class="dots">●●●○○</td></tr>
+      <tr><td>Kể chuyện "một ngày của Hun"</td><td class="dots">●●●●●</td><td class="dots">●●●●○</td><td class="dots">●●●○○</td></tr>
+      <tr><td>Độc đáo, gây nhớ</td><td class="dots">●●●●○</td><td class="dots">●●●●●</td><td class="dots">●●●●○</td></tr>
+      <tr><td>Đẹp trên điện thoại</td><td class="dots">●●●●●</td><td class="dots">●●●○○</td><td class="dots">●●●○○</td></tr>
+      <tr><td>Phụ thuộc asset mới</td><td>Thấp (1 key art)</td><td>Không</td><td>Vừa (5 poster + phòng chiếu)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="opt">
+  <h2 style="font-size:clamp(26px,3vw,36px)">Giữ nguyên ở cả 3 phương án</h2>
+  <div class="keep">
+    <figure class="frame" style="margin:0">
+      <div class="mock">
+        <div class="k-bg"><img src="img/06.webp" alt="Hun ở quầy vé"></div>
+        <div class="k-card"><h4>Miễn phí <em>trọn đời.</em></h4><div class="k-free">Vé trọn đời<small>Ghi thu chi · cảm xúc · sức khỏe · nhắc thuốc · cảnh báo người nhà</small></div><div class="k-plus">Hun Plus<small>Vé thêm · 49.000đ/tháng · 399.000đ/năm</small></div></div>
+      </div>
+      <figcaption>Vé xem phim trên nền Hun full màn hình, rồi hỏi đáp 2 cột và "Sắp công chiếu trên iPhone".</figcaption>
+    </figure>
+    <div class="note">
+      <b style="font-family:var(--f-head);font-size:20px">Câu hỏi kèm theo: người nhà có xuất hiện không?</b>
+      <p>"Hun giúp mọi người" sẽ rõ hơn hẳn nếu thấy được người được giúp. Mình đề xuất <b>chỉ lộ tay và dáng</b>: bàn tay mẹ nhận tách trà, cặp kính của ba, đôi dép của con. Đây là thủ pháp quen thuộc của phim stop-motion, ấm và gợi, và Codex vẽ ổn định hơn nhiều so với cả một nhân vật mới.</p>
+      <ol><li>Chỉ lộ tay, dáng (khuyến nghị)</li><li>Đủ nhân vật đất sét: ba, mẹ, con</li><li>Chỉ Hun như hiện tại</li></ol>
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var B=[['01a','Chương 1 · Buổi sáng','Mỗi sáng, Hun hỏi lòng mình một câu.','Cảm xúc'],['02c','Chương 2 · Buổi trưa','Số đo ổn rồi. Ba mẹ ở xa vẫn yên tâm.','Sức khỏe'],
+         ['03c','Chương 3 · Buổi tối','Từng đồng nhỏ, vun thành hũ đầy.','Chi tiêu'],['04c','Chương 4 · Chủ nhật','Mời người thương cùng vào tổ ấm.','Gia đình'],['05c','Chương 5 · Ban đêm','Ngủ ngon nha. Mai mình lại chăm chút.','Riêng tư']];
+  var reel=document.getElementById('bReel');
+  B.concat(B).forEach(function(b){var i=new Image();i.src='img/'+b[0]+'.webp';i.alt='';reel.appendChild(i)});
+  var frames=reel.querySelectorAll('img'),k=0;
+  function stepB(){
+    var b=B[k%B.length],scr=document.getElementById('bScreen'),mock=document.getElementById('bMock');
+    var cq=mock.clientWidth/100,itemH=frames[0].offsetHeight+1.6*cq;
+    reel.style.transform='translateY('+(mock.clientHeight/2-itemH*(k%B.length)-frames[0].offsetHeight/2-(-2*cq))+'px)';
+    frames.forEach(function(f,i){f.classList.toggle('on',i===k%B.length)});
+    var back=document.getElementById('bBack');back.src=scr.src;scr.style.transition='none';scr.style.opacity=0;scr.src='img/'+b[0]+'.webp';scr.onload=function(){requestAnimationFrame(function(){scr.style.transition='';scr.style.opacity=1})};if(scr.complete){scr.style.transition='';scr.style.opacity=1}
+    document.getElementById('bCh').textContent=b[1];document.getElementById('bSub').textContent=b[2];
+    document.getElementById('bPhone').innerHTML=b[3]+'<small>ảnh app thật</small>';k++;
+  }
+  stepB();if(!reduce)setInterval(stepB,2600);addEventListener('resize',function(){k--;stepB()});
+
+  var C=[['01a','Giữ lòng nhẹ','Cảm xúc','Mỗi sáng, Hun hỏi lòng mình một câu.'],['02c','Giữ người khỏe','Sức khỏe','Số đo ổn rồi. Ba mẹ ở xa vẫn yên tâm.'],
+         ['03c','Giữ ví khỏe','Chi tiêu','Từng đồng nhỏ, vun thành hũ đầy.'],['04b','Ngồi lại cùng nhau','Gia đình','Tuần này mình chi ít hơn tuần trước.'],['05c','Giữ chuyện nhà mình','Riêng tư','Ngủ ngon nha. Mai mình lại chăm chút.']];
+  var wrap=document.getElementById('cPosters');
+  C.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.className='c-poster'+(i===0?' on':'');
+    b.innerHTML='<img src="img/'+c[0]+'.webp" alt=""><span><small>'+c[2]+'</small>'+c[1]+'</span>';b.setAttribute('aria-label','Chiếu phim '+c[1]);
+    b.addEventListener('click',function(){wrap.querySelectorAll('.c-poster').forEach(function(x){x.classList.toggle('on',x===b)});
+      var s=document.getElementById('cScreen');s.style.opacity=0;setTimeout(function(){s.src='img/'+c[0]+'.webp';s.style.opacity=1},reduce?0:220);document.getElementById('cSub').textContent=c[3]});
+    wrap.appendChild(b)});
+})();
+</script>
