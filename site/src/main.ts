@@ -355,7 +355,6 @@ function headerLabel() {
 }
 function goTo(to: number) {
   if (!ready) return;
-  if (to > LAST && page === LAST) return credits.skip(); // past the end: hurry the credits along
   to = Math.max(0, Math.min(LAST, to));
   if (to === page) return;
   const from = page;
@@ -379,6 +378,7 @@ function goTo(to: number) {
   }
   go(Math.max(0, Math.min(SHOTS - 1, to - 1)));
   topbar.classList.toggle('compact', to > 0);
+  $('.more').classList.toggle('on', to > SHOTS && to < LAST);
   headerLabel();
   markTicks();
 
@@ -391,7 +391,7 @@ function goTo(to: number) {
 const credits = (() => {
   const win = $('.credits .win', end);
   const crawl = $('.crawl', end);
-  const skipBtn = $<HTMLButtonElement>('.skip', end);
+  const skipBtn = $<HTMLButtonElement>('.ff', end);
   const screen = $('.screen', end);
   const bow = $('.bow', screen);
   const box = $('.pc', screen);
@@ -402,9 +402,7 @@ const credits = (() => {
   const hasPc = frameCount.pc === 8;
   if (!hasPc) $('.tease', end).hidden = true;
   const imgs: HTMLImageElement[] = [];
-  let roll: gsap.core.Tween | undefined;
   let after: gsap.core.Timeline | undefined;
-  const distance = () => Math.max(0, crawl.scrollHeight - win.clientHeight);
 
   function load() {
     if (!hasPc || imgs.length) return;
@@ -444,39 +442,73 @@ const credits = (() => {
       .call(() => void (again.hidden = false));
     return tl;
   }
-  function done() {
-    skipBtn.hidden = true;
-    if (hasPc && !reduceMotion) after = stinger(1.4);
+  // The credits are a scroll the audience can hold: they roll on their own, stop under the mouse, and the wheel
+  // or a finger moves them either way. Left alone for a moment, they roll on.
+  const SPEED = 80; // px a second
+  const panel = $('.credits', end);
+  let pos = 0, shown = 0, idleUntil = 0, hover = false, active = false, finished = false, tY = 0, tPos = 0, dragged = false;
+  const max = () => Math.max(0, crawl.scrollHeight - win.clientHeight);
+  const rest = (ms: number) => void (idleUntil = performance.now() + ms);
+  function tick(_t: number, dt: number) {
+    const m = max();
+    if (!reduceMotion && !hover && performance.now() > idleUntil) pos += (SPEED * dt) / 1000;
+    pos = Math.min(m, Math.max(0, pos));
+    shown += (pos - shown) * (1 - Math.exp(-dt / 110));
+    if (Math.abs(pos - shown) < 0.3) shown = pos;
+    crawl.style.transform = `translate3d(0, ${-shown}px, 0)`;
+    const atEnd = pos >= m - 1;
+    if (skipBtn.hidden !== atEnd) skipBtn.hidden = atEnd;
+    if (atEnd && !finished) {
+      finished = true;
+      if (hasPc && !reduceMotion) after = stinger(1.4);
+    }
   }
   function start() {
-    roll?.kill();
     resetScreen();
-    skipBtn.hidden = false;
-    if (reduceMotion) {
-      gsap.set(crawl, { y: -distance() });
-      return done();
-    }
-    gsap.set(crawl, { y: 0 });
-    roll = gsap.to(crawl, { y: () => -distance(), duration: distance() / 85, ease: 'none', delay: 1, onComplete: done });
+    finished = false;
+    pos = shown = reduceMotion ? max() : 0;
+    rest(1000);
+    if (!active) gsap.ticker.add(tick);
+    active = true;
   }
-  function skip() {
-    if (roll && roll.progress() < 1) gsap.to(roll, { timeScale: 16, duration: 0.4, ease: 'power1.in' });
+  function stop() {
+    active = false;
+    gsap.ticker.remove(tick);
+    after?.pause();
   }
-  skipBtn.addEventListener('click', skip);
+  const nudge = (dy: number) => {
+    pos = Math.min(max(), Math.max(0, pos + dy));
+    rest(2000);
+  };
+  skipBtn.addEventListener('click', () => nudge(max()));
+  panel.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && (hover = true));
+  panel.addEventListener('pointerleave', () => {
+    hover = false;
+    rest(400);
+  });
+  addEventListener('touchstart', () => void (dragged = false), { passive: true, capture: true });
+  panel.addEventListener('touchstart', (e) => {
+    tY = e.touches[0].clientY;
+    tPos = pos;
+  }, { passive: true });
+  panel.addEventListener('touchmove', (e) => {
+    nudge(tPos + tY - e.touches[0].clientY - pos);
+    if (Math.abs(pos - tPos) > 2) dragged = true;
+  }, { passive: true });
   again.addEventListener('click', () => {
     resetScreen();
     after = stinger(0.2);
   });
-  addEventListener('resize', () => roll?.invalidate());
   return {
-    skip,
+    /** can the credits move this way (so the wheel or a key moves them instead of cutting) */
+    can: (dir: number) => active && (dir > 0 ? pos < max() - 1 : pos > 1),
+    nudge,
+    /** did the last touch drag the credits (then it is not a swipe to another page) */
+    dragged: () => dragged,
     at(to: number, from: number) {
       if (to >= LAST - 1) load();
       if (to === LAST) start();
-      else if (from === LAST) {
-        roll?.pause();
-        after?.pause();
-      }
+      else if (from === LAST) stop();
     },
   };
 })();
@@ -556,8 +588,14 @@ addEventListener(
     wPrev = a;
     // a sheet taller than the screen scrolls on its own first; reaching its edge needs a new swipe to cut
     const sh = sheetNow();
-    if (sh && !wFired && (wInner || canScroll(sh, dir))) {
+    const inner = page === LAST ? credits.can(dir) : !!sh && canScroll(sh, dir);
+    if (sh && !wFired && (wInner || inner)) {
       wInner = true;
+      // the end's credits move under the wheel; the other sheets scroll natively
+      if (page === LAST) {
+        e.preventDefault();
+        credits.nudge(dy);
+      }
       return;
     }
     e.preventDefault();
@@ -580,7 +618,7 @@ addEventListener('touchmove', (e) => !sheetNow() && e.cancelable && e.preventDef
 addEventListener('touchend', (e) => {
   const dy = tY - e.changedTouches[0].clientY;
   const sh = sheetNow();
-  if (Math.abs(dy) < 40 || (sh && Math.abs(sh.scrollTop - tTop) > 2)) return;
+  if (Math.abs(dy) < 40 || (sh && Math.abs(sh.scrollTop - tTop) > 2) || (page === LAST && credits.dragged())) return;
   goTo(page + (dy > 0 ? 1 : -1));
 });
 
@@ -596,10 +634,18 @@ addEventListener('keydown', (e) => {
   if (e.key === ' ' && (e.target as HTMLElement).closest('button, summary, a')) return;
   e.preventDefault();
   const dir = down ? 1 : -1;
+  if (page === LAST && credits.can(dir)) return credits.nudge(dir * innerHeight * 0.4);
+  forward(dir);
+});
+
+// the ticket and the FAQ say there is more below them
+function forward(dir: number) {
   const sh = sheetNow();
   if (sh && canScroll(sh, dir)) sh.scrollBy({ top: dir * innerHeight * 0.6, behavior: reduceMotion ? 'auto' : 'smooth' });
   else goTo(page + dir);
-});
+}
+const more = $<HTMLButtonElement>('.more');
+more.addEventListener('click', () => forward(1));
 
 // links inside the page jump to their page
 const PAGE_OF: Record<string, number> = { top: 0, ve: SHOTS + 1, 'hoi-dap': SHOTS + 2, 'het-phim': SHOTS + 3 };

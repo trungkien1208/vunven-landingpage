@@ -113,6 +113,7 @@ page = f'''<!doctype html>
           <div class="finale" aria-hidden="true"><img class="last" src="/film/5c.webp" alt=""><img class="tix" src="/film/ticket.webp" data-sm="/film/ticket-sm.webp" alt=""></div>
         </div>
         <div class="runway" id="runway"></div>
+        <button type="button" class="more">{t("more")}{icon("arrow-down", "bold", "ar")}</button>
 
         <section class="ve" id="ve" aria-labelledby="ve-title">
         <div class="panel">
@@ -178,7 +179,7 @@ page = f'''<!doctype html>
                 <footer class="foot"><span>© <span id="year">2026</span> Vun Vén · <a href="https://tdk.best/" target="_blank" rel="noopener">tdk.best</a></span><span><a href="https://tdk.best/product/vunven/privacy" target="_blank" rel="noopener" data-t="foot.privacy">{VI["foot.privacy"]}</a> · <a href="https://tdk.best/product/vunven/termandcondition" target="_blank" rel="noopener" data-t="foot.terms">{VI["foot.terms"]}</a></span></footer>
               </div>
             </div></div>
-            <button type="button" class="skip">{t("end.skip")}{icon("fast-forward", "fill", "ar")}</button>
+            <button type="button" class="ff">{t("end.skip")}{icon("fast-forward", "fill", "ar")}</button>
           </aside>
         </div>
       </section>
