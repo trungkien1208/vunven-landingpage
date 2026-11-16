@@ -8,6 +8,9 @@ const mobile = matchMedia('(max-width: 760px)').matches;
 const $ = <T extends HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
 const $$ = <T extends HTMLElement>(sel: string, root: ParentNode = document) => [...root.querySelectorAll<T>(sel)];
 const frameCount = FILM as unknown as Record<string, number>;
+// files in public/ live under the site's base path ("/" locally, "/vunven-landingpage/" on GitHub Pages)
+const B = import.meta.env.BASE_URL;
+const pub = (u: string) => (u.startsWith('/') ? B + u.slice(1) : u);
 
 $('#year').textContent = String(new Date().getFullYear());
 
@@ -55,12 +58,12 @@ const chapters = $$('.ch').map((sec) => {
 });
 type Chapter = (typeof chapters)[number];
 const SHOTS = chapters.length * 3;
-const frameSrc = (id: string, n: number) => `/film/${id}/${n}${mobile ? '-sm' : ''}.webp`;
-const stillSrc = (id: string) => `/film/${id}${mobile ? '-sm' : ''}.webp`;
+const frameSrc = (id: string, n: number) => `${B}film/${id}/${n}${mobile ? '-sm' : ''}.webp`;
+const stillSrc = (id: string) => `${B}film/${id}${mobile ? '-sm' : ''}.webp`;
 const lastSrc = (id: string) => (frameCount[id] ? frameSrc(id, frameCount[id]) : stillSrc(id));
 chapters.forEach((c) => c.imgs.forEach((im, i) => (im.classList.add('front'), im.src = frameCount[c.shots[i]] ? frameSrc(c.shots[i], 1) : stillSrc(c.shots[i]))));
 $<HTMLImageElement>('.finale .last').src = lastSrc('5c');
-if (mobile) $<HTMLImageElement>('.finale .tix').src = $<HTMLImageElement>('.finale .tix').dataset.sm!;
+if (mobile) $<HTMLImageElement>('.finale .tix').src = pub($<HTMLImageElement>('.finale .tix').dataset.sm!);
 
 // The picture's place on the stage (the 16:9 image inside the black screen), as a clip-path inset, so the titles
 // can shrink into it and the end can grow out of it.
@@ -175,7 +178,7 @@ const ambs = $$<HTMLImageElement>('.amb img');
 let ambOn = 0;
 let ambWant = '';
 function ambient(id: string) {
-  const src = `/film/${id}-amb.webp`;
+  const src = `${B}film/${id}-amb.webp`;
   if (mobile || src === ambWant) return;
   ambWant = src;
   const next = ambs[ambOn ^ 1];
@@ -270,7 +273,7 @@ addEventListener('load', () => {
   const urls = [
     ...chapters.flatMap((c) => c.shots.flatMap((id) => [
       ...Array.from({ length: frameCount[id] || 0 }, (_, f) => frameSrc(id, f + 1)),
-      ...(mobile ? [] : [`/film/${id}-amb.webp`]), // the ambient light
+      ...(mobile ? [] : [`${B}film/${id}-amb.webp`]), // the ambient light
     ])),
     ...$$<HTMLImageElement>('.finale img, .bleed .bg img').map((im) => im.currentSrc || im.src),
   ];
@@ -409,7 +412,7 @@ const credits = (() => {
       const im = new Image();
       im.alt = '';
       im.decoding = 'async';
-      im.src = `/film/pc/${n}${mobile ? '-sm' : ''}.webp`;
+      im.src = `${B}film/pc/${n}${mobile ? '-sm' : ''}.webp`;
       box.append(im);
       imgs.push(im);
     }
@@ -616,7 +619,7 @@ $$<HTMLAnchorElement>('a[href^="#"]').forEach((a) =>
 let ready = false;
 {
   const urls = [
-    mobile ? '/film/poster-4x5-sm.webp' : '/film/poster-16x9.webp',
+    mobile ? `${B}film/poster-4x5-sm.webp` : `${B}film/poster-16x9.webp`,
     ...chapters[0].shots.flatMap((id) => Array.from({ length: frameCount[id] || 1 }, (_, f) => (frameCount[id] ? frameSrc(id, f + 1) : stillSrc(id)))),
     ...chapters.slice(1).map((c) => (frameCount[c.shots[0]] ? frameSrc(c.shots[0], 1) : stillSrc(c.shots[0]))),
   ];
@@ -682,6 +685,6 @@ $$<HTMLButtonElement>('.lang button').forEach((b) =>
 
 // ---------- the credits' backdrops: load them early so the cut never shows an empty sheet ----------
 $$<HTMLImageElement>('.bleed .bg img').forEach((im) => {
-  if (mobile) im.src = im.dataset.sm!;
+  if (mobile) im.src = pub(im.dataset.sm!);
   im.loading = 'eager';
 });
